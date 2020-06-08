@@ -8,6 +8,7 @@
       lighten($text-primary-dark, 20),
       $text-primary-dark
     );
+    background-attachment: scroll;
     height: 85vh;
     h1 {
       padding: 20px;
@@ -27,6 +28,8 @@
 
   .navbar {
     background-color: $bg-color-main;
+    position: sticky;
+    top: 0;
     display: flex;
     justify-content: space-around;
     height: 15vh;

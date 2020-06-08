@@ -5,7 +5,7 @@ import { FaRegUser } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import "../styles/header.scss";
 
-export const Header = ({ user }) => {
+const Header = ({ user }) => {
   return (
     <header className="header">
       <div className="banner">
@@ -29,13 +29,13 @@ export const Header = ({ user }) => {
             <GoPrimitiveDot />
           </span>
           <li>
-            <Link to="/">Sign Up</Link>
+            <Link to="/signup">Sign Up</Link>
           </li>
           <span>
             <GoPrimitiveDot />
           </span>
           <li>
-            <Link to="/">
+            <Link to="/login">
               <FaRegUser size="25px" fill="white" />
               Log In
             </Link>
@@ -45,3 +45,5 @@ export const Header = ({ user }) => {
     </header>
   );
 };
+
+export default Header;
