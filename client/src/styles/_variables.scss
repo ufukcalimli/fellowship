@@ -1,0 +1,22 @@
+$text-primary: #f9fcf3;
+$text-primary-dark: #1c1b23;
+$bg-color-main: #ff6f26;
+$bg-color-helper: #ff7a05;
+
+@mixin transitionAll {
+  transition: all 0.5s;
+}
+
+@mixin gridItem($colStart, $colEnd, $rowStart, $rowEnd) {
+  grid-column-start: $colStart;
+  grid-column-end: $colEnd;
+  grid-row-start: $rowStart;
+  grid-row-end: $rowEnd;
+}
+
+@mixin paragraphStyle($txtAlign) {
+  text-align: $txtAlign;
+  margin: 50px 10px 0 0;
+  font-size: 1.4rem;
+  line-height: 25pt;
+}

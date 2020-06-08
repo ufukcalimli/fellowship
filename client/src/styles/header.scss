@@ -1,0 +1,55 @@
+@import "config";
+@import "variables";
+
+.header {
+  .banner {
+    position: relative;
+    background: linear-gradient(
+      lighten($text-primary-dark, 20),
+      $text-primary-dark
+    );
+    height: 85vh;
+    h1 {
+      padding: 20px;
+      z-index: 2;
+      color: $text-primary;
+      font-size: 7rem;
+    }
+    .animated-images {
+      position: absolute;
+      border: 2px solid white;
+      height: 250px;
+      width: 50%;
+      bottom: 10px;
+      right: 10px;
+    }
+  }
+
+  .navbar {
+    background-color: $bg-color-main;
+    display: flex;
+    justify-content: space-around;
+    height: 15vh;
+    border-radius: 0px 0px 10px 10px;
+
+    ul {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      color: $text-primary;
+      font-weight: 600;
+      li {
+        margin: 10px;
+        @include transitionAll;
+        a {
+          font-size: 2rem;
+        }
+        &:hover {
+          text-shadow: 1px 1px 1px
+            lighten($color: $text-primary-dark, $amount: 10);
+          transform: translate(0px, -10px);
+        }
+      }
+    }
+  }
+}
