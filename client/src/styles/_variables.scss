@@ -22,3 +22,22 @@ $bg-color-helper: #ff7a05;
   font-size: 1.4rem;
   line-height: 25pt;
 }
+
+@mixin imagePositioning($position, $top, $left, $right, $bottom) {
+  position: $position;
+  top: $top;
+  left: $left;
+  right: $right;
+  bottom: $bottom;
+}
+
+@mixin keyframesOpacity {
+  @keyframes opacity {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}

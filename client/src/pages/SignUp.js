@@ -48,9 +48,7 @@ const SignUp = () => {
         </form>
         <small>
           Already a member?
-          <Link to="/login" style={{ color: "#72E4CE", marginLeft: "10px" }}>
-            Log in to Your Account
-          </Link>
+          <Link to="/login">Log in to Your Account</Link>
         </small>
       </section>
     </div>

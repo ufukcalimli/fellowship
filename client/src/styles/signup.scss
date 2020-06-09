@@ -45,11 +45,15 @@
           background: darken($color: $turquoise, $amount: 10);
         }
       }
-
-      small {
-        a {
-          border: 1px solid black;
-          color: $turquoise !important;
+    }
+    small {
+      text-align: center;
+      a {
+        margin-left: 10px;
+        color: $turquoise;
+        text-shadow: 1px 1px 1px lighten($text-primary-dark, 50);
+        &:hover {
+          color: darken($turquoise, 20);
         }
       }
     }
