@@ -6,11 +6,11 @@ const TagSchema = new mongoose.Schema({
         required: true
     },
     posts: [
-        {
+        post: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'post'
         }
     ]
 })
 
-module.exports = mongoose.model('User', TagSchema)
+module.exports = mongoose.model('tag', TagSchema)

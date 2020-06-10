@@ -5,9 +5,13 @@ connectDb()
 
 const app = express();
 
-app.get('/', (req, res, next) => {
-    res.send('Home page')
-})
+app.use(express.json());
+
+app.use('/api/user', require('./routes/user'));
+app.use('/api/post', require('./routes/post'));
+app.use('/api/tag', require('./routes/tag'));
+app.use('/api/role', require('./routes/role'));
+app.use('/api/comment', require('./routes/comment'));
 
 const PORT = 5000 || process.env.PORT;
 

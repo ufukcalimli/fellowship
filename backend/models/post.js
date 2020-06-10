@@ -17,8 +17,12 @@ const PostSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
+    label: {
+        type: String,
+        default: 'blog_post'
+    },
     tags: [
-        {
+        tag: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'tag'
         }
