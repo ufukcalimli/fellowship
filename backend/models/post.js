@@ -22,9 +22,11 @@ const PostSchema = new mongoose.Schema({
         default: 'blog_post'
     },
     tags: [
-        tag: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'tag'
+        {
+            tag: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'tag'
+            }
         }
     ],
     comments: [

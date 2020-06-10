@@ -15,13 +15,15 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
     role:{
-        type: mongoose.Schema.type.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'role'
     },
     posts: [
-        post: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'post'
+        {
+            post: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'post'
+            }
         }
     ]
 })
