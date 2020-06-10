@@ -14,6 +14,10 @@ const SignUp = () => {
     setSignUpForm({ ...signUpForm, [e.target.name]: e.target.value });
   };
 
+  const handleSubmit = () => {
+    console.log(signUpForm);
+  };
+
   const { username, role, email, password } = signUpForm;
   return (
     <div className="signup_container">
@@ -36,6 +40,19 @@ const SignUp = () => {
             onChange={(e) => handleChange(e)}
             required
           />
+          <label htmlFor="role">I'm a:</label>
+
+          <select
+            name="role"
+            id="role"
+            value={role}
+            onChange={(e) => handleChange(e)}
+          >
+            <option value="select"></option>
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+          </select>
+
           <label>Password: </label>
           <input
             name="password"
@@ -44,7 +61,7 @@ const SignUp = () => {
             onChange={(e) => handleChange(e)}
             required
           />
-          <input type="button" value="Sign Up" />
+          <input type="button" value="Sign Up" onClick={() => handleSubmit()} />
         </form>
         <small>
           Already a member?
