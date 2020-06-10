@@ -1,0 +1,50 @@
+@import "config";
+@import "variables";
+.footer {
+  background: $text-primary-dark;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  height: 25vh;
+  color: silver;
+  display: flex;
+  justify-content: space-evenly;
+  .links__social {
+    margin: 20px;
+    cursor: pointer;
+    i {
+      display: block;
+      @include transitionAll;
+      &:hover {
+        color: $bg-color-main;
+      }
+    }
+  }
+  .links__menu {
+    margin: 20px;
+    li {
+      list-style: none;
+      position: relative;
+      margin: 15px;
+      a {
+        .bottom_line {
+          position: absolute;
+          background-color: white;
+          bottom: 0px;
+          right: 0px;
+          width: 100%;
+          @include transitionAll;
+          height: 2px;
+          transform: scaleX(0);
+          transform-origin: top left;
+          transition-delay: 0.5/4;
+        }
+        &:hover {
+          .bottom_line {
+            transition-delay: 4/2;
+            transform: scaleX(1);
+          }
+        }
+      }
+    }
+  }
+}
