@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { check, validationResult} = require('express-validator')
 
 const Comment = require('../models/comment')
 const User = require('../models/user')
@@ -63,7 +64,14 @@ router.get('/post/:post_id', async (req, res, next) => {
 })
 
 // Post comment
-router.post('/', async (req, res, next) => {
+router.post('/', [
+    check('content', 'Content of comment should not be empty!')
+        .not()
+        .isEmpty()
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()) { return res.status(400).json({ errors: errors.array()})}    
+        
     const { content, user, post } = req.body
     try {
         const comment = await new Comment({
@@ -87,7 +95,14 @@ router.post('/', async (req, res, next) => {
 })
 
 // Update comment
-router.patch('/:id', async (req, res, next) => {
+router.patch('/:id', [
+    check('content', 'Content of comment should not be empty!')
+        .not()
+        .isEmpty()
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array() }) }
+        
     const comment_id = req.params.id
     const { content } = req.body
     try {
