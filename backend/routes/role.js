@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { check, validationResult } = require('express-validator/check')
 
 const Role = require('../models/role')
 
@@ -31,7 +32,14 @@ router.get('/:role', async (req, res, next) => {
 })
 
 // Post role
-router.post('/', async (req, res, next) => {
+router.post('/', [
+    check('title', 'Title should not be empty!')
+        .not()
+        .isEmpty()
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()) { return res.status(400).json({ errors: errors.array()})}    
+        
     const { title } = req.body
     try {
         let role = await Role.findOne({ title })

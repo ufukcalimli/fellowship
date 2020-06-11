@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { check, validationResult } = require('express-validator/check')
 
 const User = require('../models/user')
 const Post = require('../models/post')
@@ -34,7 +35,18 @@ router.get('/:id', async (req, res, next) => {
 })
 
 // Post user
-router.post('/', async (req, res, next) => {
+router.post('/', [
+    check('name', 'User name is required!')
+        .not()
+        .isEmpty(),
+    check('email', 'User email is required!')
+        .isEmail(),
+    check('password', 'Password should contain minimum 6 characters!')
+        .isLength({ min: 6})
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array()})}        
+        
     const {name, email, password, role} = req.body;
     try {
         let user = await User.findOne({ email });
@@ -42,7 +54,7 @@ router.post('/', async (req, res, next) => {
         if(user) return res.status(400).json({ msg: 'User already exists'})
 
         const userRole = await Role.findOne({ title: role })
-        console.log({name, email, password, role, userRole})
+
         user = await new User({
             name,
             email,
@@ -60,7 +72,16 @@ router.post('/', async (req, res, next) => {
 })
 
 // Update user
-router.patch('/:id', async (req, res, next) => {
+router.patch('/:id', [
+    check('name', 'User name is required!')
+        .not()
+        .isEmpty(),
+    check('email', 'User email is required!')
+        .isEmail()
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array()})}    
+    
     const userId = req.params.id
     const { name, email, role} = req.body
     try {
@@ -97,10 +118,12 @@ router.delete('/:id', async (req, res, next) => {
 
         if (!user) return res.status(400).send('User is not found')
         
-        await Comment.deleteMany({ user: userId})
-        await Post.deleteMany({ user: userId })
-        await User.findOneAndDelete({ _id: userId })
-        
+        await Promise.all([
+            await Comment.deleteMany({ user: userId}),
+            await Post.deleteMany({ user: userId }),
+            await User.findOneAndDelete({ _id: userId })
+        ])
+
         res.json({ msg: 'User deleted'})
     } catch (error) {
         console.log(error)

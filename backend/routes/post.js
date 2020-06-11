@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose')
+const { check, validationResult} = require('express-validator/check')
 
 const Post = require('../models/post')
 const Comment = require('../models/comment')
@@ -37,7 +37,20 @@ router.get('/:id', async (req, res, next) => {
 const filterTags = (db, reqTags) => { return db.filter(item => reqTags.includes(item.title)) }
 
 // Post post
-router.post('/', async (req, res, next) => {
+router.post('/', [
+    check('title', 'Post title should not be empty')
+        .not()
+        .isEmpty(),
+    check('content', 'Post content should not be empty')
+        .not()
+        .isEmpty(),
+    check('label', 'Label should not be empty')
+        .not()
+        .isEmpty()
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()) { return res.status(400).json({ errors: errors.array()})}    
+        
     const {
         title,
         content,
@@ -84,7 +97,20 @@ router.post('/', async (req, res, next) => {
 })
 
 // Update post
-router.patch('/:id', async (req, res, next) => {
+router.patch('/:id', [
+    check('title', 'Post title should not be empty')
+        .not()
+        .isEmpty(),
+    check('content', 'Post content should not be empty')
+        .not()
+        .isEmpty(),
+    check('label', 'Label should not be empty')
+        .not()
+        .isEmpty()
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array() }) }  
+        
     const postId = req.params.id
     const {
         title,
