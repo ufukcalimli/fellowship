@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { check, validationResult} = require('express-validator/check')
+const { check, validationResult} = require('express-validator')
 
 const Post = require('../models/post')
 const Comment = require('../models/comment')
