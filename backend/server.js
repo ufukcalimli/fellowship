@@ -1,17 +1,18 @@
-const express = require('express');
-const connectDb = require('./helpers/db')
+const express = require("express");
+const connectDb = require("./helpers/db");
+const cors = require("cors");
 
-connectDb()
+connectDb();
 
 const app = express();
-
+app.use(cors());
 app.use(express.json());
 
-app.use('/api/user', require('./routes/user'));
-app.use('/api/post', require('./routes/post'));
-app.use('/api/tag', require('./routes/tag'));
-app.use('/api/role', require('./routes/role'));
-app.use('/api/comment', require('./routes/comment'));
+app.use("/api/user", require("./routes/user"));
+app.use("/api/post", require("./routes/post"));
+app.use("/api/tag", require("./routes/tag"));
+app.use("/api/role", require("./routes/role"));
+app.use("/api/comment", require("./routes/comment"));
 
 const PORT = 5000 || process.env.PORT;
 

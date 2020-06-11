@@ -1,0 +1,12 @@
+@import "config";
+@import "variables";
+
+.homepage_main {
+  display: grid;
+  grid-template-columns: 10% 15% auto 15% 10%;
+  grid-template-rows: repeat(10, 300px);
+  .homepage_posts {
+    @include gridItem(3, 4, 2, 11);
+    border: 1px solid black;
+  }
+}
