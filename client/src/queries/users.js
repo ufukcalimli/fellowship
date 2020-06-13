@@ -12,8 +12,8 @@ export const GET_USERS = gql`
 `;
 
 export const CREATE_USER = gql`
-  mutation createUser($input: signUpForm!) {
-    createUser(input: $signUpForm)
+  mutation CreateUser($input: Object!) {
+    createUser(input: null)
       @rest(type: "User", path: "/api/user", method: "POST") {
       firstname
       email
