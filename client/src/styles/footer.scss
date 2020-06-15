@@ -1,26 +1,30 @@
 @import "config";
 @import "variables";
 .footer {
-  background: $text-primary-dark;
+  background: $dark;
   background-attachment: fixed;
-  background-repeat: no-repeat;
   height: 25vh;
   color: silver;
   display: flex;
   justify-content: space-evenly;
   .links__social {
+    display: flex;
+    flex-direction: column;
     margin: 20px;
     cursor: pointer;
     i {
       display: block;
       @include transitionAll;
       &:hover {
-        color: $bg-color-main;
+        color: $orange-dark;
       }
     }
   }
   .links__menu {
     margin: 20px;
+    ul {
+      display: flex;
+    }
     li {
       list-style: none;
       position: relative;

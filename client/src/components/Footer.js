@@ -14,7 +14,6 @@ const Footer = () => {
         </i>
         <i>
           <AiFillLinkedin size="35px" />
-          LinkedIn
         </i>
       </section>
       <section className="links__menu">
@@ -26,7 +25,7 @@ const Footer = () => {
             </Link>
           </li>
           <li>
-            <Link to="#">
+            <Link to="/">
               Us
               <span className="bottom_line"></span>
             </Link>
@@ -44,6 +43,14 @@ const Footer = () => {
             </Link>
           </li>
         </ul>
+        <div className="blm">
+          <h4>#BlackLivesMatter </h4>
+          <p>
+            LangCommune stands with the protesters againts racism and police
+            brutality. We encourage our community to get in the streets and join
+            them if you can.{" "}
+          </p>
+        </div>
       </section>
     </footer>
   );

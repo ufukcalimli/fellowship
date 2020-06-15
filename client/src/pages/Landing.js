@@ -1,10 +1,13 @@
 import React from "react";
 import Header from "../components/Header";
 import "../styles/landing.scss";
+import { Redirect } from "react-router-dom";
+import { user } from "../mocks";
 
 const Landing = () => {
   return (
     <React.Fragment>
+      {user && <Redirect to="/home" />}
       <Header />
       <div className="landing-container">
         <section className="landing__intro">

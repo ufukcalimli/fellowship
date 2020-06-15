@@ -33,7 +33,7 @@ const Header = ({ user }) => {
           <li>
             <TiHome size="1.5em" fill="white" />
 
-            <Link to="/">Home</Link>
+            <Link to="/home">Home</Link>
           </li>
           <span>
             <GoPrimitiveDot />

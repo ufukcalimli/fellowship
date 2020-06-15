@@ -12,7 +12,7 @@
       animation-delay: 1.3s;
       padding: 20px;
       z-index: 2;
-      color: $text-primary-dark;
+      color: $dark;
       font-size: 7vw;
     }
     .animated-images {
@@ -61,11 +61,12 @@
 }
 
 .navbar {
-  background-color: $bg-color-main;
+  background-color: $orange-dark;
   display: flex;
   justify-content: space-between;
   height: 10vh;
   border-radius: 0px 0px 10px 10px;
+  z-index: 2;
   div {
     display: flex;
     align-items: center;
@@ -104,8 +105,7 @@
         font-size: 1.2rem;
       }
       &:hover {
-        text-shadow: 1px 1px 1px
-          lighten($color: $text-primary-dark, $amount: 10);
+        text-shadow: 1px 1px 1px lighten($color: $dark, $amount: 10);
         transform: translate(0px, -10px);
       }
     }

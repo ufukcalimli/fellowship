@@ -1,18 +1,26 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { BsPen } from "react-icons/bs";
 import { TiHome, TiUser } from "react-icons/ti";
 import { GoPrimitiveDot } from "react-icons/go";
+import { user } from "../mocks";
 import Logo from "../images/logo1.png";
 import "../styles/header.scss";
 
-const Navbar = ({ user }) => {
+const Navbar = () => {
+  let history = useHistory();
+  function redirect() {
+    return history.push("/");
+  }
+
   return (
     <React.Fragment>
       {!user && (
         <nav className="navbar navbar_main">
           <div>
-            <img className="logo" src={Logo} alt="site_logo"></img>
+            <Link to="/">
+              <img className="logo" src={Logo} alt="site_logo" />
+            </Link>
             <div className="search">
               <input type="text" />
             </div>
