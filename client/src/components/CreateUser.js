@@ -1,38 +1,21 @@
 import React from "react";
-import { Mutation } from "react-apollo";
+import { useMutation } from "@apollo/react-hooks";
 import { GET_USERS, CREATE_USER } from "../queries/users";
 
 const CreateUser = ({ signUpForm }) => {
+  const [createUser, { data }] = useMutation(CREATE_USER);
   return (
-    <Mutation
-      mutation={CREATE_USER}
-      update={(cache, { data: { createUser } }) => {
-        const users = cache.readQuery({ query: GET_USERS });
-        cache.writeQuery({
-          query: GET_USERS,
-          data: {
-            users: {
-              data: users.data.concat([createUser]),
-              __typename: "User",
-            },
-          },
-        });
-      }}
-    >
-      <div>
-        {(createUser, { data }) => (
-          <input
-            type="button"
-            value="Sign Up"
-            onClick={() =>
-              createUser({
-                variables: { signUpForm },
-              })
-            }
-          />
-        )}
-      </div>
-    </Mutation>
+    <div>
+      <input
+        type="button"
+        value="Sign Up"
+        onClick={() =>
+          createUser({
+            variables: { input: signUpForm },
+          })
+        }
+      />
+    </div>
   );
 };
 

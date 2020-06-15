@@ -1,6 +1,9 @@
 const express = require('express');
-const router = express.Router();
 const { check, validationResult } = require('express-validator')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+
+const router = express.Router();
 
 const User = require('../models/user')
 const Post = require('../models/post')
@@ -36,7 +39,7 @@ router.get('/:id', async (req, res, next) => {
 
 // Post user
 router.post('/', [
-    check('name', 'User name is required!')
+    check('firstname', 'User name is required!')
         .not()
         .isEmpty(),
     check('email', 'User email is required!')
@@ -47,7 +50,7 @@ router.post('/', [
     const errors = validationResult(req)
     if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array()})}        
         
-    const {name, email, password, role} = req.body;
+    const {firstname, email, password, role} = req.body;
     try {
         let user = await User.findOne({ email });
 
@@ -56,15 +59,28 @@ router.post('/', [
         const userRole = await Role.findOne({ title: role })
 
         user = await new User({
-            name,
+            firstname,
             email,
             password,
             role: userRole._id
         })
 
+        // Password encryption
+        const salt = await bcrypt.genSalt(10)
+        user.password = await bcrypt.hash(password, salt)
+
         await user.save()
 
-        res.json(user)
+        const payload = {
+            user: {
+                id: user.id
+            }
+        }
+
+        jwt.sign(payload, process.env.JWTSECRET, { expiresIn: 36000 }, (err, token) => {
+            if (err) throw err;
+            res.json({ token })
+        })
     } catch (error) {
         console.log(error)
         res.status(500).send('Server error!')

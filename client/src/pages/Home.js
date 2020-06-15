@@ -2,10 +2,13 @@ import React from "react";
 import { Query } from "react-apollo";
 import { GET_USERS } from "../queries/users";
 import "../styles/home.scss";
+import Navbar from "../components/Navbar";
 
-const Home = () => (
+const Home = ({ user }) => (
   <div className="homepage_main">
-    <section>header</section>
+    <section className="homepage_header">
+      <Navbar user={false} />
+    </section>
     <section className="homepage_tags">Popular Tags</section>
     <section className="homepage_posts">Latest Posts</section>
 

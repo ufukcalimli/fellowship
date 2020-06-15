@@ -4,7 +4,15 @@
 .homepage_main {
   display: grid;
   grid-template-columns: 10% 15% auto 15% 10%;
-  grid-template-rows: repeat(10, 300px);
+  grid-template-rows: repeat(10, 150px);
+  .homepage_header {
+    @include gridItem(1, 6, 1, 1);
+    border: 1px solid black;
+  }
+  .homepage_tags {
+    @include gridItem(1, 3, 2, 5);
+    border: 1px solid black;
+  }
   .homepage_posts {
     @include gridItem(3, 4, 2, 11);
     border: 1px solid black;
