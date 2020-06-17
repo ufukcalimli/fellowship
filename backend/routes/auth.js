@@ -6,14 +6,68 @@ const jwt = require('jsonwebtoken')
 const router = express.Router()
 
 const User = require('../models/user')
-const { JsonWebTokenError } = require('jsonwebtoken')
+const Profile = require('../models/profile')
 
-// login
-router.post('/login', [
-    check('email', 'Please input email')
+// Post user
+router.post('/signup', [
+    check('user_name', 'User name is required!')
         .not()
         .isEmpty(),
-    check('password', 'Please should contain 6 characters')
+    check('email', 'User email is required!')
+        .isEmail(),
+    check('password', 'Password should contain minimum 6 characters!')
+        .isLength({ min: 6})
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array()})}        
+        
+    const { email, password, user_name} = req.body;
+    try {
+        let user = await User.findOne({ email });
+        if (user) { return res.status(400).json({ msg: 'User already exists' }) }
+
+        let profile = await Profile.findOne({ user_name })
+        if(profile) { return res.status(400).json({ msg: 'Profile exists with this user name, please log in'})}
+
+        user = await new User({
+            email,
+            password,
+        })
+
+        profile = await new Profile({
+            user_name,
+            user: user._id
+        })
+        await profile.save()
+
+        // Password encryption
+        const salt = await bcrypt.genSalt(10)
+        user.password = await bcrypt.hash(password, salt)
+
+        await user.save()
+
+        const payload = {
+            user: {
+                id: user.id
+            }
+        }
+
+        jwt.sign(payload, process.env.JWTSECRET, { expiresIn: 36000 }, (err, token) => {
+            if (err) throw err;
+            res.json({ token })
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Server error!')
+    }
+})
+
+router.post('/login', [
+    check('email', 'Please input valid email address')
+        .isEmail()
+        .not()
+        .isEmpty(),
+    check('password', 'Password should contain 6 characters')
         .isLength({ min: 6 })
 ], async (req, res, next) => {
     const errors = validationResult(req)

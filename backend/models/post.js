@@ -21,6 +21,10 @@ const PostSchema = new mongoose.Schema({
         type: String,
         default: 'blog_post'
     },
+    created_at: {
+        type: Date,
+        default: Date.now  
+    },
     tags: [
         {
             tag: {
