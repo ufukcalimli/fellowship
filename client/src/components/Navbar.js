@@ -3,6 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import { BsPen } from "react-icons/bs";
 import { TiHome, TiUser } from "react-icons/ti";
 import { GoPrimitiveDot } from "react-icons/go";
+import { RiLogoutBoxRLine } from "react-icons/ri";
 import { user } from "../mocks";
 import Logo from "../images/logo1.png";
 import "../styles/header.scss";
@@ -58,6 +59,14 @@ const Navbar = () => {
           </div>
           <ul>
             <li>
+              <TiHome size="1.5em" fill="white" />
+
+              <Link to="/">Home</Link>
+            </li>
+            <span>
+              <GoPrimitiveDot />
+            </span>
+            <li>
               <BsPen size="1.5em" fill="white" />
 
               <Link to="/create_post">Write A post</Link>
@@ -68,6 +77,13 @@ const Navbar = () => {
             <li>
               <TiUser size="1.5em" fill="white" />
               <Link to="/dashboard">Dashboard</Link>
+            </li>
+            <span>
+              <GoPrimitiveDot />
+            </span>
+            <li>
+              <RiLogoutBoxRLine size="1.5em" fill="white" />
+              <Link to="/dashboard">Logout</Link>
             </li>
           </ul>
         </nav>
