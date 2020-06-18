@@ -1,9 +1,0 @@
-@import "config";
-@import "variables";
-
-.tag_block {
-  display: grid;
-  grid-template-columns: 20vh auto 20vh;
-  grid-template-rows: repeat(10, 10vh);
-  height: 100vh;
-}

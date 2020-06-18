@@ -12,6 +12,10 @@ const LogIn = () => {
     setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
   };
 
+  const handleSubmit = () => {
+    console.log(loginForm);
+  };
+
   const { email, password } = loginForm;
   return (
     <div className="login_container">
@@ -34,7 +38,7 @@ const LogIn = () => {
             onChange={(e) => handleChange(e)}
             required
           />
-          <input type="button" value="LogIn" />
+          <input type="button" value="LogIn" onClick={() => handleSubmit()} />
         </form>
         <small>
           Not a member yet?
