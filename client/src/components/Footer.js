@@ -9,11 +9,10 @@ const Footer = () => {
     <footer className="footer">
       <section className="links__social">
         <i>
-          <DiGithubBadge size="35px" />
-          <DiGithubFull size="35px" />
-        </i>
-        <i>
-          <AiFillLinkedin size="35px" />
+          <a href="https://github.com/ufukcalimli/fellowship" target="_blank">
+            <DiGithubBadge size="35px" />
+            <DiGithubFull size="35px" />
+          </a>
         </i>
       </section>
       <section className="links__menu">

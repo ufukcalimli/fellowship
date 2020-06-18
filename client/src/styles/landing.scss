@@ -1,16 +1,46 @@
 @import "config";
 @import "variables";
+@import "media";
 
 .landing-container {
   display: grid;
   grid-template-columns: repeat(2, 50%);
   grid-template-rows: repeat(3, 400px);
+  overflow: auto;
+  @include tablet() {
+    grid-template-rows: repeat(5, 400px);
+  }
+  img {
+    height: 400px;
+    width: 100%;
+    @include tablet() {
+      border: 3px solid $orange-light;
+    }
+    @include phone() {
+      border: 3px solid $orange-light;
+    }
+  }
   .landing__intro {
-    @include gridItem(1, 3, 1, 2);
     display: flex;
+    @include gridItem(1, 3, 1, 2);
+    @include tablet() {
+      @include gridItem(1, 3, 1, 3);
+      flex-direction: column;
+    }
+    @include phone {
+      @include gridItem(1, 3, 1, 3);
+      flex-direction: column;
+    }
     & > div {
       width: 50%;
+      @include tablet() {
+        width: 100%;
+      }
+      @include phone() {
+        width: 100%;
+      }
     }
+
     .intro {
       padding: 20px;
       h2 {
@@ -20,12 +50,40 @@
         @include paragraphStyle(right);
       }
     }
+    .intro__image {
+      img {
+        border-left: 3px solid $orange-light;
+        border-bottom: 3px solid $orange-light;
+      }
+    }
   }
   .landing__site_info {
     @include gridItem(1, 3, 2, 3);
     display: flex;
+    @include tablet() {
+      @include gridItem(1, 3, 3, 5);
+      flex-direction: column-reverse;
+    }
+    @include phone() {
+      @include gridItem(1, 3, 3, 5);
+      flex-direction: column-reverse;
+    }
     & > div {
       width: 50%;
+      @include tablet() {
+        width: 100%;
+      }
+      @include phone() {
+        width: 100%;
+      }
+      img {
+        border-top: 3px solid $orange-light;
+        border-right: 3px solid $orange-light;
+        border-bottom: 3px solid $orange-light;
+      }
+    }
+    div:nth-child(2) {
+      padding: 20px;
     }
     h2 {
       font-size: 3rem;
@@ -37,14 +95,49 @@
   .landing__explore {
     @include gridItem(1, 3, 3, 4);
     display: flex;
+    @include tablet() {
+      @include gridItem(1, 3, 5, 7);
+      flex-direction: column;
+    }
+    @include phone() {
+      @include gridItem(1, 3, 5, 7);
+      flex-direction: column;
+    }
+
     & > div {
       width: 50%;
+      @include tablet() {
+        width: 100%;
+      }
+      @include phone() {
+        width: 100%;
+      }
+      img {
+        border-top: 3px solid $orange-light;
+        border-left: 3px solid $orange-light;
+      }
     }
     h2 {
       font-size: 3rem;
     }
     p {
       @include paragraphStyle(right);
+    }
+    .btn_signup {
+      padding: 10px;
+      margin: 10px;
+      align-self: center;
+      background: $orange-light;
+      color: $dark;
+      font-weight: bolder;
+      border-radius: 4px;
+      cursor: pointer;
+      @include transitionAll;
+      &:hover {
+        background: $orange-dark;
+        color: $text-primary;
+        transform: scale(1.1);
+      }
     }
   }
 }
