@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { GoPrimitiveDot } from "react-icons/go";
-import { FaRegUser } from "react-icons/fa";
-import { AiFillHome } from "react-icons/ai";
+import { TiHome, TiUser } from "react-icons/ti";
 import gutentag from "../images/gutentag.png";
 import buenasdias from "../images/buenasdias.png";
 import ciao from "../images/ciao.png";
@@ -32,10 +31,9 @@ const Header = ({ user }) => {
         </div>
         <ul>
           <li>
-            <Link to="/">
-              <AiFillHome size="35px" />
-              Home
-            </Link>
+            <TiHome size="1.5em" fill="white" />
+
+            <Link to="/home">Home</Link>
           </li>
           <span>
             <GoPrimitiveDot />
@@ -47,10 +45,8 @@ const Header = ({ user }) => {
             <GoPrimitiveDot />
           </span>
           <li>
-            <Link to="/login">
-              <FaRegUser size="25px" fill="white" />
-              Log In
-            </Link>
+            <TiUser size="1.5em" fill="white" />
+            <Link to="/login">Log In</Link>
           </li>
         </ul>
       </div>

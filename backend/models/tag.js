@@ -6,9 +6,11 @@ const TagSchema = new mongoose.Schema({
         required: true
     },
     posts: [
-        post: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'post'
+        {
+            post: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'post'
+            }
         }
     ]
 })

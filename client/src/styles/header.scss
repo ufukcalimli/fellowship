@@ -1,5 +1,6 @@
 @import "config";
 @import "variables";
+@import "media";
 
 .header {
   position: relative;
@@ -7,10 +8,13 @@
     position: relative;
     height: 85vh;
     h1 {
+      opacity: 0;
+      animation: opacity 0.6s ease-in forwards;
+      animation-delay: 1.3s;
       padding: 20px;
       z-index: 2;
-      color: $text-primary-dark;
-      font-size: 7rem;
+      color: $dark;
+      font-size: 7vw;
     }
     .animated-images {
       position: absolute;
@@ -19,25 +23,38 @@
       bottom: 10px;
       right: 10px;
       img {
+        animation: opacity 0.3s ease-in forwards;
         &:first-child {
+          opacity: 0;
           @include imagePositioning(absolute, 45%, 27%, 0px, 30px);
+          animation-delay: 0.2s;
           z-index: 3;
         }
         &:nth-of-type(2n) {
           @include imagePositioning(absolute, 0px, 88px, 0px, 30px);
+          opacity: 0;
+          animation-delay: 0.4s;
         }
         &:nth-of-type(3n) {
           @include imagePositioning(absolute, -15%, 60%, 0px, 30px);
+          opacity: 0;
+          animation-delay: 0.6s;
         }
         &:nth-of-type(4n) {
           @include imagePositioning(absolute, 15%, 44%, 0px, 0px);
           z-index: 2;
+          opacity: 0;
+          animation-delay: 0.8s;
         }
         &:nth-of-type(5n) {
           @include imagePositioning(absolute, 50%, 5%, 0px, 0px);
+          opacity: 0;
+          animation-delay: 1s;
         }
         &:nth-of-type(6n) {
           @include imagePositioning(absolute, 50%, 55%, 0px, 0px);
+          opacity: 0;
+          animation-delay: 1.2s;
         }
       }
     }
@@ -45,13 +62,28 @@
 }
 
 .navbar {
-  background-color: $bg-color-main;
-  position: sticky;
-  top: 0px;
+  background-color: $orange-dark;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   height: 10vh;
   border-radius: 0px 0px 10px 10px;
+  z-index: 2;
+  div {
+    display: flex;
+    align-items: center;
+    .logo {
+      height: 10vh;
+    }
+
+    .search {
+      input {
+        width: 100%;
+        padding: 5px;
+        border-radius: 10px;
+        margin: 20px;
+      }
+    }
+  }
 
   ul {
     display: flex;
@@ -59,17 +91,140 @@
     list-style: none;
     color: $text-primary;
     font-weight: 600;
+    margin-right: 20px;
     li {
       margin: 10px;
+      padding: 20px;
       @include transitionAll;
+      svg {
+        &:first-child {
+          margin: -3px;
+          margin-right: 6px;
+        }
+      }
       a {
         font-size: 1.2rem;
+        @include tablet() {
+          font-size: 1rem;
+        }
+        @include phone() {
+          font-size: initial;
+          padding: 0px;
+        }
       }
       &:hover {
-        text-shadow: 1px 1px 1px
-          lighten($color: $text-primary-dark, $amount: 10);
+        text-shadow: 1px 1px 1px lighten($color: $dark, $amount: 10);
         transform: translate(0px, -10px);
       }
     }
+  }
+}
+
+.navbar_main {
+  position: fixed;
+  width: 100%;
+  top: 0px;
+  animation: 1s ease-in-out 0s 1 navbarAnimation;
+  ul {
+    @include tablet() {
+      display: none;
+    }
+    @include phone() {
+      display: none;
+    }
+  }
+  .hamburger_icon {
+    display: none;
+    align-self: center;
+    margin: 10px;
+    div {
+      width: 35px;
+      height: 5px;
+      background-color: black;
+      margin: 6px 0;
+      background: $text-primary;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    @include tablet() {
+      display: block;
+    }
+    @include phone() {
+      display: block;
+    }
+  }
+
+  .hamburger_icon_animation {
+    @include transitionAll();
+    transform: rotate(8turn);
+
+    div {
+      &:first-child {
+        transform: rotate(135deg);
+        position: relative;
+        top: 6px;
+      }
+      &:nth-child(2) {
+        display: none;
+      }
+      &:nth-child(3) {
+        transform: rotate(45deg);
+        position: relative;
+        top: -5px;
+      }
+    }
+  }
+}
+
+.navbar_mobile {
+  ul {
+    display: block;
+    height: 100vh;
+    background: $orange-dark;
+    position: absolute;
+    width: 100%;
+    list-style: none;
+    text-align: center;
+    li {
+      position: relative;
+      animation: rightCome 0.5s linear;
+      @include animationDelay();
+      a {
+        font-size: 2em;
+      }
+    }
+    span {
+      display: none;
+    }
+  }
+}
+
+@keyframes navbarAnimation {
+  0% {
+    top: -10%;
+  }
+  100% {
+    top: 0px;
+  }
+}
+
+@keyframes rightCome {
+  from {
+    opacity: 0;
+    right: -100px;
+  }
+
+  to {
+    right: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

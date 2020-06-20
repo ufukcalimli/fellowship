@@ -1,4 +1,8 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+
 const router = express.Router();
 
 const User = require('../models/user')
@@ -34,25 +38,49 @@ router.get('/:id', async (req, res, next) => {
 })
 
 // Post user
-router.post('/', async (req, res, next) => {
-    const {name, email, password, role} = req.body;
+router.post('/', [
+    check('firstname', 'User name is required!')
+        .not()
+        .isEmpty(),
+    check('email', 'User email is required!')
+        .isEmail(),
+    check('password', 'Password should contain minimum 6 characters!')
+        .isLength({ min: 6})
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array()})}        
+        
+    const {firstname, email, password, role} = req.body;
     try {
         let user = await User.findOne({ email });
 
         if(user) return res.status(400).json({ msg: 'User already exists'})
 
         const userRole = await Role.findOne({ title: role })
-        console.log({name, email, password, role, userRole})
+
         user = await new User({
-            name,
+            firstname,
             email,
             password,
             role: userRole._id
         })
 
+        // Password encryption
+        const salt = await bcrypt.genSalt(10)
+        user.password = await bcrypt.hash(password, salt)
+
         await user.save()
 
-        res.json(user)
+        const payload = {
+            user: {
+                id: user.id
+            }
+        }
+
+        jwt.sign(payload, process.env.JWTSECRET, { expiresIn: 36000 }, (err, token) => {
+            if (err) throw err;
+            res.json({ token })
+        })
     } catch (error) {
         console.log(error)
         res.status(500).send('Server error!')
@@ -60,7 +88,16 @@ router.post('/', async (req, res, next) => {
 })
 
 // Update user
-router.patch('/:id', async (req, res, next) => {
+router.patch('/:id', [
+    check('name', 'User name is required!')
+        .not()
+        .isEmpty(),
+    check('email', 'User email is required!')
+        .isEmail()
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array()})}    
+    
     const userId = req.params.id
     const { name, email, role} = req.body
     try {
@@ -97,10 +134,12 @@ router.delete('/:id', async (req, res, next) => {
 
         if (!user) return res.status(400).send('User is not found')
         
-        await Comment.deleteMany({ user: userId})
-        await Post.deleteMany({ user: userId })
-        await User.findOneAndDelete({ _id: userId })
-        
+        await Promise.all([
+            await Comment.deleteMany({ user: userId}),
+            await Post.deleteMany({ user: userId }),
+            await User.findOneAndDelete({ _id: userId })
+        ])
+
         res.json({ msg: 'User deleted'})
     } catch (error) {
         console.log(error)

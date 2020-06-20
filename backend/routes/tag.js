@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { check, validationResult } = require('express-validator')
 
 const Tag = require('../models/tag')
 
@@ -30,7 +31,14 @@ router.get('/:tag', async (req, res, next) => {
 })
 
 // Get all posts by tag name
-router.get('/:tag/posts', async (req, res, next) => {
+router.get('/:tag/posts', [
+    check('title', 'Title should not be empty')
+        .not()
+        .isEmpty()
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty){ return res.status(400).json({ errors: errors.array() })}
+        
     const tagName = req.params.tag
     try {
         const postsByTag = await Tag.findOne({ title: tagName}).populate('posts')
@@ -45,7 +53,14 @@ router.get('/:tag/posts', async (req, res, next) => {
 })
 
 // Post tag
-router.post('/', async (req, res, next) => {
+router.post('/', [
+    check('title', 'Title should not be empty')
+        .not()
+        .isEmpty()
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty) { return res.status(400).json({ errors: errors.array() }) }
+        
     const { title } = req.body
     try {
         let tag = await Tag.findOne({ title })
