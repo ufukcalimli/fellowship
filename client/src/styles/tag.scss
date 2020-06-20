@@ -6,4 +6,66 @@
   grid-template-columns: 20vh auto 20vh;
   grid-template-rows: repeat(10, 10vh);
   height: 100vh;
+  .inner_block {
+    @include gridItem(1, 4, 2, 11);
+    .flex_block {
+      display: flex;
+      justify-content: center;
+      h1 {
+        text-align: center;
+        font-size: 3em;
+      }
+      .btn_follow {
+        outline: none;
+        box-shadow: $box-shadow;
+        align-self: center;
+        margin: 10px 0 0 12px;
+        cursor: pointer;
+        background: $orange-light;
+        padding: 5px;
+        border-radius: 4px;
+      }
+    }
+
+    .s_flex_left {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid black;
+      div {
+        align-self: baseline;
+      }
+    }
+    .s_flex_right {
+      float: right;
+      margin: 20px;
+      div {
+        ul {
+          list-style: none;
+          li {
+            margin-top: 13px;
+          }
+        }
+      }
+    }
+
+    .s_flex_mid {
+      width: 400px;
+      .post_list {
+        height: 70vh;
+        overflow-y: auto;
+        h5 {
+          font-size: 2em;
+        }
+        div {
+          background: gray;
+          margin: 5px;
+          border-radius: 5px;
+          padding: 20px;
+        }
+      }
+    }
+  }
+  .navbar {
+    @include gridItem(1, 4, 1, 2);
+  }
 }

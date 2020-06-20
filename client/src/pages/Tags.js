@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { mockTags } from "../mocks";
-import "../styles/tags.scss";
 import { Link } from "react-router-dom";
+import "../styles/tags.scss";
 
 const Tags = () => {
   return (

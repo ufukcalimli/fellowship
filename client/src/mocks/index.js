@@ -25,4 +25,47 @@ export const discussions = [
   },
 ];
 
+export const mockPosts = [
+  {
+    id: 1,
+    user: "foo",
+    post: {
+      title: "lorem",
+      content:
+        "When writing articles, the paragraph is probably the most important unit of composition. A paragraph is a group of sentences that, when put together, discuss one main idea. Paragraphs have three main parts: the topic sentence, body sentences, and the concluding sentence. Let’s cover how a paragraph should be put together by you or a content writer.",
+      tags: ["Lorem", "ipsum", "dolor", "sit", "amet"],
+    },
+  },
+  {
+    id: 2,
+    user: "foo",
+    post: {
+      title: "lorem",
+      content:
+        "When writing articles, the paragraph is probably the most important unit of composition. A paragraph is a group of sentences that, when put together, discuss one main idea. Paragraphs have three main parts: the topic sentence, body sentences, and the concluding sentence. Let’s cover how a paragraph should be put together by you or a content writer.",
+      tags: ["Lorem", "ipsum", "dolor", "sit", "amet"],
+    },
+  },
+  {
+    id: 3,
+    user: "foo",
+    post: {
+      title: "lorem",
+      content:
+        "When writing articles, the paragraph is probably the most important unit of composition. A paragraph is a group of sentences that, when put together, discuss one main idea. Paragraphs have three main parts: the topic sentence, body sentences, and the concluding sentence. Let’s cover how a paragraph should be put together by you or a content writer.",
+      tags: ["Lorem", "ipsum", "dolor", "sit", "amet"],
+    },
+  },
+  {
+    id: 4,
+    user: "foo",
+    post: {
+      title: "lorem",
+      content:
+        "When writing articles, the paragraph is probably the most important unit of composition. A paragraph is a group of sentences that, when put together, discuss one main idea. Paragraphs have three main parts: the topic sentence, body sentences, and the concluding sentence. Let’s cover how a paragraph should be put together by you or a content writer.",
+      tags: ["Lorem", "ipsum", "dolor", "sit", "amet"],
+    },
+  },
+];
+
 export const user = true;

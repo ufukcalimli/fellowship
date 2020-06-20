@@ -1,5 +1,6 @@
 @import "config";
 @import "variables";
+@import "media";
 
 .tags_page {
   display: grid;
@@ -8,33 +9,39 @@
   background: rgb(214, 213, 213);
 
   h1 {
-    @include gridItem(2, 3, 2, 3);
     font-size: 3rem;
     text-align: center;
+    @include gridItem(2, 3, 2, 3);
+    @include tablet() {
+      font-size: 2em;
+    }
+    @include phone() {
+      font-size: 2em;
+    }
   }
   .most-popular-tags {
-    @include gridItem(2, 3, 2, 6);
     display: flex;
     justify-content: center;
+    @include gridItem(2, 3, 2, 6);
     ul {
       list-style: none;
       text-align: center;
       margin-top: 60px;
       width: 70%;
       li {
-        @include tagTransitionAndColoring;
-        @include animationDelay();
         position: relative;
         margin: 7px;
         border-radius: 15px;
         animation: fadeIn 0.5s linear;
         animation-fill-mode: both;
         box-shadow: $box-shadow;
+        @include tagTransitionAndColoring;
+        @include animationDelay();
 
         &:hover {
+          transform: translate(0px, -3px);
           @include tagTransitionAndColoring;
           @include transitionAll;
-          transform: translate(0px, -3px);
         }
         a {
           padding: 2px;
