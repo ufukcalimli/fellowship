@@ -1,12 +1,35 @@
 const express = require("express");
-const connectDb = require("./helpers/db");
 const cors = require("cors");
+const passport = require('passport')
+const session = require('express-session')
+
+const connectDb = require("./config/db");
 
 connectDb();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
+app.use(session({
+    saveUninitialized: false,
+    resave:false,
+    secret: 'session_secret', 
+}))
+
+require('./config/passport')
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use((req, res, next) => {
+    //console.log(req.session);
+    console.log({user: req.user});
+    next();
+});
+
+app.use('/', (req, res, next) => {
+    res.send(`root endpoint and user: ${req.user} session: ${req.session}`)
+})
 
 app.use("/api/auth", require("./routes/auth"));
 
