@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { check, validationResult} = require('express-validator')
 
+const isAuth = require('../config/isAuth');
+
 const Comment = require('../models/comment')
-const User = require('../models/user')
-const Post = require('../models/post')
+const Post = require('../models/post');
 
 // Get comments
 router.get('/', async (req, res, next) => {
@@ -65,6 +66,7 @@ router.get('/post/:post_id', async (req, res, next) => {
 
 // Post comment
 router.post('/', [
+    isAuth,
     check('content', 'Content of comment should not be empty!')
         .not()
         .isEmpty()
@@ -96,6 +98,7 @@ router.post('/', [
 
 // Update comment
 router.patch('/:id', [
+    isAuth,
     check('content', 'Content of comment should not be empty!')
         .not()
         .isEmpty()
@@ -128,7 +131,7 @@ router.patch('/:id', [
 })
 
 // Delete comment
-router.delete('/:comment_id', async (req, res, next) => {
+router.delete('/:comment_id', isAuth, async (req, res, next) => {
     const comment_id = req.params.comment_id
     try {
         const comment = await Comment.findOne({ _id: comment_id })

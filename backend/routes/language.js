@@ -2,6 +2,7 @@ const express = require('express')
 const { check, validationResult } = require('express-validator')
 
 const Language = require('../models/language')
+const isAuth = require('../config/isAuth')
 
 const router = express.Router()
 
@@ -33,6 +34,7 @@ router.get('/:lang', async (req, res, next) => {
 
 // Post language
 router.post('/', [
+    isAuth,
     check('title', 'Title should not be empty')
         .not()
         .isEmpty()
@@ -57,7 +59,12 @@ router.post('/', [
 })
 
 // Patch language
-router.patch('/:lang', async (req, res, next) => {
+router.patch('/:lang', [
+        isAuth,
+        check('title', 'Title should not be empty')
+            .not()
+            .isEmpty()
+    ], async (req, res, next) => {
     const lang = req.params.lang
     const { title } = req.body
     try {
@@ -78,7 +85,7 @@ router.patch('/:lang', async (req, res, next) => {
 })
 
 // Delete language
-router.delete('/:lang', async (req, res, next) => {
+router.delete('/:lang', isAuth, async (req, res, next) => {
     const lang = req.params.lang
     try {
         const language = await Language.findOne({ title: lang })

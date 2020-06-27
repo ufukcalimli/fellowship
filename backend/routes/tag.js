@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator')
 
+const isAuth = require('../config/isAuth');
+
 const Tag = require('../models/tag')
-const Profile = require('../models/profile')
+const Profile = require('../models/profile');
 
 // Get tags
 router.get('/', async (req, res, next) => {
@@ -55,6 +57,7 @@ router.get('/:tag/posts', [
 
 // Post tag
 router.post('/', [
+    isAuth,
     check('title', 'Title should not be empty')
         .not()
         .isEmpty()
@@ -80,7 +83,7 @@ router.post('/', [
 })
 
 // Follow tag
-router.post('/follow/:tag/:user_id', async (req, res, next) => {
+router.post('/follow/:tag/:user_id', isAuth, async (req, res, next) => {
     const {tag, user_id} = req.params
     try {
         const dbTag = await Tag.findOne({ title: tag.toLowerCase() })
@@ -106,7 +109,7 @@ router.post('/follow/:tag/:user_id', async (req, res, next) => {
 })
 
 // Delete tag
-router.delete('/:tag', async (req, res, next) => {
+router.delete('/:tag', isAuth, async (req, res, next) => {
     const tagName = req.params.tag
     try {
         const tag = await Tag.findOne({ title: tagName })

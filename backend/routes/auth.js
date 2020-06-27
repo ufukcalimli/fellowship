@@ -57,8 +57,7 @@ router.post('/signup', [
         req.login(user, (err) => {
             if (err) { return next(err) }
         })
-        
-        console.log(req.user)
+
         jwt.sign(payload, process.env.JWTSECRET, { expiresIn: 36000 }, (err, token) => {
             if (err) throw err;
             res.json({ token })
