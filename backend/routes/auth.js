@@ -40,13 +40,13 @@ router.post('/signup', [
             user_name,
             user: user._id
         })
-        await profile.save()
-
+        
         // Password encryption
         const salt = await bcrypt.genSalt(10)
         user.password = await bcrypt.hash(password, salt)
-
+        
         await user.save()
+        await profile.save()
 
         const payload = {
             user: {
@@ -54,6 +54,11 @@ router.post('/signup', [
             }
         }
 
+        req.login(user, (err) => {
+            if (err) { return next(err) }
+        })
+        
+        console.log(req.user)
         jwt.sign(payload, process.env.JWTSECRET, { expiresIn: 36000 }, (err, token) => {
             if (err) throw err;
             res.json({ token })
@@ -65,19 +70,21 @@ router.post('/signup', [
 })
 
 router.post('/login',
-    passport.authenticate('local',
+    [
+        check('email', 'Email is required!')
+            .isEmail(),
+        check('password', 'Password should contain 6 characters')
+            .isLength({ min: 6 }),
+        passport.authenticate('local',
         {
-            successRedirect: '/api/auth/login/redirect',
+            successRedirect: '/api/auth/passport/success',
             failureRedirect: '/login',
             failureFlash: true
-    }),
+        })
+    ],
     async (req, res, next) => {
         const { email, password } = req.body
         try {
-            req.login(user, function(err) {
-                if (err) { return next(err); }
-                return res.redirect('/' + req.user);
-              });
             let user = await User.findOne({ email })
             if (!user) { 
                 return res.status(400).json({ error: 'Invalid credentials!' })
@@ -103,8 +110,8 @@ router.post('/login',
 )
 
     
-router.get('/login/redirect', (req, res, next) => {
-    res.send(`login redirect, user: ${req.user}`)
+router.get('/passport/success', (req, res, next) => {
+    res.send(`passport success, user: ${req.user}`)
 })
 
 module.exports = router
