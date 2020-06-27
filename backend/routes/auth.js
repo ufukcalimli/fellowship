@@ -67,34 +67,37 @@ router.post('/signup', [
 router.post('/login',
     passport.authenticate('local',
         {
-            successRedirect: '/',
+            successRedirect: '/api/auth/login/redirect',
             failureRedirect: '/login',
             failureFlash: true
     }),
     async (req, res, next) => {
         const { email, password } = req.body
         try {
-            res.send(`Logged in`)
-            // let user = await User.findOne({ email })
-            // if (!user) { 
-            //     return res.status(400).json({ error: 'Invalid credentials!' })
-            // }
+            req.login(user, function(err) {
+                if (err) { return next(err); }
+                return res.redirect('/' + req.user);
+              });
+            let user = await User.findOne({ email })
+            if (!user) { 
+                return res.status(400).json({ error: 'Invalid credentials!' })
+            }
 
-            // const isMatch = await bcrypt.compare(password, user.password)
-            // if (!isMatch) {
-            //     return res.status(400).json({ error: 'Invalid credentials!' })
-            // }
+            const isMatch = await bcrypt.compare(password, user.password)
+            if (!isMatch) {
+                return res.status(400).json({ error: 'Invalid credentials!' })
+            }
                 
-            // const payload = {
-            //     user: {
-            //         id: user.id
-            //     }
-            // }
+            const payload = {
+                user: {
+                    id: user.id
+                }
+            }
 
-            // jwt.sign(payload, process.env.JWTSECRET, { expiresIn: 36000 }, (err, token) => {
-            //     if (err) throw err;
-            //     res.json({ token })
-            // })   
+            jwt.sign(payload, process.env.JWTSECRET, { expiresIn: 36000 }, (err, token) => {
+                if (err) throw err;
+                res.json({ token })
+            })   
         } catch (error) { res.status(500).send('Server error')}    
     }
 )

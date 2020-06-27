@@ -21,16 +21,6 @@ require('./config/passport')
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use((req, res, next) => {
-    //console.log(req.session);
-    console.log({user: req.user});
-    next();
-});
-
-app.use('/', (req, res, next) => {
-    res.send(`root endpoint and user: ${req.user} session: ${req.session}`)
-})
-
 app.use("/api/auth", require("./routes/auth"));
 
 app.use("/api/user", require("./routes/user"));
