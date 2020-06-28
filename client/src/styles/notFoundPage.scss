@@ -1,5 +1,6 @@
 @import "config";
 @import "variables";
+@import "media";
 
 .page_not_found {
   display: grid;
@@ -9,6 +10,12 @@
   .inquirer {
     @include gridItem(1, 3, 2, 3);
     padding: 20px;
+    @include tablet() {
+      @include gridItem(1, 4, 2, 3);
+    }
+    @include phone() {
+      @include gridItem(1, 4, 2, 3);
+    }
     h1 {
       font-size: 5rem;
     }
@@ -18,5 +25,11 @@
   }
   .lost_gif {
     @include gridItem(3, 4, 2, 4);
+    @include tablet() {
+      @include gridItem(1, 4, 3, 5);
+    }
+    @include phone() {
+      @include gridItem(1, 4, 3, 5);
+    }
   }
 }

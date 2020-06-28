@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import Lost from "../images/lost.gif";
 import "../styles/notFoundPage.scss";
 
 const NotFoundPage = () => {
@@ -14,7 +15,7 @@ const NotFoundPage = () => {
       </div>
       <iframe
         className="lost_gif"
-        src="https://giphy.com/embed/xT0xeh7KMi11ijnE9W"
+        src={Lost}
         width="331"
         height="480"
         frameBorder="0"
