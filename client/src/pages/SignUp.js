@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/signup.scss";
-import CreateUser from "../components/CreateUser";
 
 const SignUp = () => {
   const [signUpForm, setSignUpForm] = useState({
