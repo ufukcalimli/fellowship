@@ -8,6 +8,7 @@ const ProfileSchema = new mongoose.Schema({
     user_name: {
         type: String,
         required: true,
+        unique: true
     },
     first_name: {
         type: String,

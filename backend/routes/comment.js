@@ -33,15 +33,15 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
-// Get all comments by user id
-router.get('/user/:user_id', async (req, res, next) => {
-    const user_id = req.params.user_id
+// Get all comments by profile id
+router.get('/profile/:profile_id', async (req, res, next) => {
+    const profile_id = req.params.profile_id
     try {
-        const commentsByUserId = await Comment.findOne({ user: user_id })
+        const commentsByProfileId = await Comment.findOne({ profile: profile_id })
         
-        if (!commentsByUserId) return res.status(400).send('No comments by this user')
+        if (!commentsByProfileId) return res.status(400).send('No comments by this profile')
         
-        res.json(commentsByUserId)
+        res.json(commentsByProfileId)
     } catch (error) {
         console.log(error);
         res.status(500).send('Server error!')
@@ -135,11 +135,13 @@ router.delete('/:comment_id', async (req, res, next) => {
         
         if (!comment) return res.status(400).send('This comment does not exist')
         
-        await Post.findOneAndUpdate(
-            { _id: comment.post.toString() },
-            { $pull: { comments: comment_id }}
-        )
-        await Comment.findOneAndDelete({ _id: comment_id })
+        await Promise.all([
+            await Post.findOneAndUpdate(
+                { _id: comment.post.toString() },
+                { $pull: { comments: comment_id }}
+            ),
+            await Comment.findOneAndDelete({ _id: comment_id })
+        ])
         
         res.send('Comment is deleted')
     } catch (error) {

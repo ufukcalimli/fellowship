@@ -4,7 +4,7 @@ const { check, validationResult} = require('express-validator')
 
 const Post = require('../models/post')
 const Comment = require('../models/comment')
-const User = require('../models/user')
+const Profile = require('../models/profile')
 const Tag = require('../models/tag')
 
 // Get all posts
@@ -43,9 +43,6 @@ router.post('/', [
         .isEmpty(),
     check('content', 'Post content should not be empty')
         .not()
-        .isEmpty(),
-    check('label', 'Label should not be empty')
-        .not()
         .isEmpty()
 ], async (req, res, next) => {
     const errors = validationResult(req)
@@ -69,18 +66,18 @@ router.post('/', [
             label,
             tags: filteredTags
         })
-        
-        // add the post to user's posts array
-        await User.findByIdAndUpdate(
-            { _id: user },
-            { $push: { posts: newPost } }
+
+        // add the post to profile's posts array
+        await Profile.findOneAndUpdate(
+            { user: user },
+            { $push: { posts: newPost } }, // Todo: fix the wrong id issue
+            { new: true }
         )
         
         // iterate given tags and append them in new post's tags array and save the post in the tag model as well
         if (filteredTags && filteredTags.length > 0) {
-            filteredTags.map(tag => {
-                //newPost.tags.shift({ tag: tag._id })
-                const tagOfPost = Tag.findOneAndUpdate(
+            filteredTags.map(async tag => {
+                await Tag.findOneAndUpdate(
                     { title: tag },
                     { $push: { posts: newPost._id}}
                 )
@@ -104,9 +101,6 @@ router.patch('/:id', [
     check('content', 'Post content should not be empty')
         .not()
         .isEmpty(),
-    check('label', 'Label should not be empty')
-        .not()
-        .isEmpty()
 ], async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array() }) }  
@@ -115,7 +109,7 @@ router.patch('/:id', [
     const {
         title,
         content,
-        user,
+        user_name,
         label,
         tags } = req.body
     try {
@@ -133,7 +127,7 @@ router.patch('/:id', [
                     title,
                     content,
                     tags: filteredTags,
-                    user,
+                    user_name,
                     label
                 }
             },
@@ -142,15 +136,20 @@ router.patch('/:id', [
         
         // iterate given tags and append them in new post's tags array and save the post in the tag model as well
          if (filteredTags && filteredTags.length > 0) {
-            filteredTags.map(tag => {
-                //newPost.tags.shift({ tag: tag._id })
-                const tagOfPost = Tag.findOneAndUpdate(
+            filteredTags.map(async tag => {
+                await Tag.findOneAndUpdate(
                     { title: tag },
                     { $push: { posts: post._id}}
                 )
             })
         }
         
+        const profile = await Profile.findOneAndUpdate(
+            { user_name },
+            { $push: { posts: post._id}}
+        )
+        
+        await profile.save()
         await post.save()
 
         res.json(post)
@@ -168,8 +167,16 @@ router.delete('/:id', async (req, res, next) => {
         
         if (!post) return res.status(400).send('Post is not found')
         
-        await Comment.deleteMany({ post: postId })
-        await Post.findOneAndDelete({ _id: postId })
+        await Promise.all([
+            await Comment.deleteMany({ post: postId }),
+            await Profile.findOneAndUpdate(
+                { user_name },
+                { $pull: { posts: post._id } }
+            ),
+            await Post.findOneAndDelete({ _id: postId })
+        ])
+
+        
         
         res.json({ msg: 'Post deleted'})
     } catch (error) {

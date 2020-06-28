@@ -1,14 +1,12 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
 
 const router = express.Router();
 
 const User = require('../models/user')
 const Post = require('../models/post')
-const Role = require('../models/role')
-const Comment = require('../models/comment')
+const Comment = require('../models/comment');
+const profile = require('../models/profile');
 
 // Get all users
 router.get('/', async (req, res, next) => {
@@ -37,56 +35,6 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
-// Post user
-router.post('/', [
-    check('firstname', 'User name is required!')
-        .not()
-        .isEmpty(),
-    check('email', 'User email is required!')
-        .isEmail(),
-    check('password', 'Password should contain minimum 6 characters!')
-        .isLength({ min: 6})
-], async (req, res, next) => {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array()})}        
-        
-    const {firstname, email, password, role} = req.body;
-    try {
-        let user = await User.findOne({ email });
-
-        if(user) return res.status(400).json({ msg: 'User already exists'})
-
-        const userRole = await Role.findOne({ title: role })
-
-        user = await new User({
-            firstname,
-            email,
-            password,
-            role: userRole._id
-        })
-
-        // Password encryption
-        const salt = await bcrypt.genSalt(10)
-        user.password = await bcrypt.hash(password, salt)
-
-        await user.save()
-
-        const payload = {
-            user: {
-                id: user.id
-            }
-        }
-
-        jwt.sign(payload, process.env.JWTSECRET, { expiresIn: 36000 }, (err, token) => {
-            if (err) throw err;
-            res.json({ token })
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(500).send('Server error!')
-    }
-})
-
 // Update user
 router.patch('/:id', [
     check('name', 'User name is required!')
@@ -99,20 +47,17 @@ router.patch('/:id', [
     if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array()})}    
     
     const userId = req.params.id
-    const { name, email, role} = req.body
+    const { name, email} = req.body
     try {
         let user = await User.findById(userId).select('-password')
 
         if (!user) return res.status(400).send('User is not found')
-        
-        const userRole = Role.findOne({title: role})
 
         user = await User.findOneAndUpdate(
             { _id : userId},
             { $set : {
                 name,
                 email,
-                role: userRole._id
             } },
             { new: true }
         )
@@ -137,6 +82,7 @@ router.delete('/:id', async (req, res, next) => {
         await Promise.all([
             await Comment.deleteMany({ user: userId}),
             await Post.deleteMany({ user: userId }),
+            await profile.findOneAndDelete({ user: userId}),
             await User.findOneAndDelete({ _id: userId })
         ])
 
