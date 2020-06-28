@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/signup.scss";
-import CreateUser from "../components/CreateUser";
 
 const SignUp = () => {
   const [signUpForm, setSignUpForm] = useState({
@@ -43,7 +42,12 @@ const SignUp = () => {
           />
           <label htmlFor="role">I'm a:</label>
 
-          <select name="role" id="role" onChange={(e) => handleChange(e)}>
+          <select
+            name="role"
+            id="role"
+            class="selection"
+            onChange={(e) => handleChange(e)}
+          >
             <option value="select"></option>
             <option value="student">Student</option>
             <option value="teacher">Teacher</option>
@@ -57,8 +61,8 @@ const SignUp = () => {
             onChange={(e) => handleChange(e)}
             required
           />
+          <input type="button" value="Sign up" onClick={() => handleSubmit()} />
         </form>
-        <CreateUser signUpForm={signUpForm} />
         <small>
           Already a member?
           <Link to="/login">Log in to Your Account</Link>

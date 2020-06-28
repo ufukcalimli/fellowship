@@ -1,8 +1,9 @@
 @import "config";
 @import "variables";
+@import "media";
+
 .footer {
   background: $dark;
-  background-attachment: fixed;
   height: 25vh;
   color: silver;
   display: flex;
@@ -12,6 +13,11 @@
     flex-direction: column;
     margin: 20px;
     cursor: pointer;
+    @include phone {
+      margin: 0;
+      padding: 10px;
+    }
+
     i {
       display: block;
       @include transitionAll;
@@ -20,6 +26,7 @@
       }
     }
   }
+
   .links__menu {
     margin: 20px;
     ul {
@@ -36,11 +43,11 @@
           bottom: 0px;
           right: 0px;
           width: 100%;
-          @include transitionAll;
           height: 2px;
           transform: scaleX(0);
           transform-origin: top left;
           transition-delay: 0.5/4;
+          @include transitionAll;
         }
         &:hover {
           .bottom_line {
@@ -50,5 +57,22 @@
         }
       }
     }
+
+    .blm {
+      p {
+        @include phone {
+          margin-left: 5px;
+          font-size: 4vw;
+        }
+      }
+    }
+
+    @include phone() {
+      margin: 0px;
+    }
+  }
+
+  @include phone {
+    justify-content: unset;
   }
 }
