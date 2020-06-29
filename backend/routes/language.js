@@ -59,13 +59,12 @@ router.post('/', [
 })
 
 // Patch language
-router.patch('/:lang', [
+router.patch('/', [
         isAuth,
         check('title', 'Title should not be empty')
             .not()
             .isEmpty()
     ], async (req, res, next) => {
-    const lang = req.params.lang
     const { title } = req.body
     try {
         let language = await Language.findOne({ title: title })
@@ -85,14 +84,14 @@ router.patch('/:lang', [
 })
 
 // Delete language
-router.delete('/:lang', isAuth, async (req, res, next) => {
-    const lang = req.params.lang
+router.delete('/', isAuth, async (req, res, next) => {
+    const title = req.body.title
     try {
-        const language = await Language.findOne({ title: lang })
+        const language = await Language.findOne({ title })
 
         if (!language) { return res.status(400).send('Language does not exists') }
         
-        await Language.findOneAndDelete({ title: lang })  
+        await Language.findOneAndDelete({ title })  
         
         res.send('Language is deleted')
     } catch (error) {

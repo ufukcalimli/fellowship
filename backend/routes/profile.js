@@ -37,7 +37,7 @@ router.get('/:user_name', isAuth, async (req, res, next) => {
 })
 
 // Patch profile
-router.patch('/:user_name', [
+router.patch('/', [
     isAuth,
     check('user_name', 'User name should not be empty')
         .not()
@@ -94,8 +94,8 @@ router.patch('/:user_name', [
 })
 
 // Delete profile
-router.delete('/:user_name', isAuth, async (req, res, next) => {
-    const user_name = req.params.user_name
+router.delete('/', isAuth, async (req, res, next) => {
+    const user_name = req.body.user_name
     try {
         await Profile.findOneAndRemove({ user_name })
         

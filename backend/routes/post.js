@@ -73,7 +73,7 @@ router.post('/', [
         // add the post to profile's posts array
         await Profile.findOneAndUpdate(
             { user: user },
-            { $push: { posts: newPost } }, // Todo: fix the wrong id issue
+            { $push: { posts: newPost } },
             { new: true }
         )
         

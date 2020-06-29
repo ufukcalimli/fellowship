@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { check, validationResult} = require('express-validator')
+const { check, validationResult } = require('express-validator')
 
 const isAuth = require('../config/isAuth');
 
 const Comment = require('../models/comment')
 const Post = require('../models/post');
+const Profile = require('../models/profile')
 
 // Get comments
 router.get('/', async (req, res, next) => {
@@ -34,15 +35,16 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
-// Get all comments by profile id
-router.get('/profile/:profile_id', async (req, res, next) => {
-    const profile_id = req.params.profile_id
+// Get all comments by user 
+router.get('/profile', async (req, res, next) => {
+    const user_id = req.user._id
     try {
-        const commentsByProfileId = await Comment.findOne({ profile: profile_id })
+        const profile = await Profile.findOne({ user: user_id }) 
+        const comments = await Comment.find({ profile }).sort({ profile })
         
-        if (!commentsByProfileId) return res.status(400).send('No comments by this profile')
+        if (!comments) return res.status(400).send('No comments by this profile')
         
-        res.json(commentsByProfileId)
+        res.json(comments)
     } catch (error) {
         console.log(error);
         res.status(500).send('Server error!')
@@ -72,13 +74,16 @@ router.post('/', [
         .isEmpty()
 ], async (req, res, next) => {
     const errors = validationResult(req)
-    if(!errors.isEmpty()) { return res.status(400).json({ errors: errors.array()})}    
+    if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array() }) }    
         
-    const { content, user, post } = req.body
-    try {
+    const { content, post } = req.body
+    const user = req.user    
+        try {
+        const profile = await Profile.findOne({ user: user._id }) 
+        
         const comment = await new Comment({
             content,
-            user,
+            profile,
             post
         })
 

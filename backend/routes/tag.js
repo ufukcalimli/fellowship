@@ -83,24 +83,48 @@ router.post('/', [
 })
 
 // Follow tag
-router.post('/follow/:tag/:user_id', isAuth, async (req, res, next) => {
-    const {tag, user_id} = req.params
+router.post('/follow/:tag/', isAuth, async (req, res, next) => {
+    const { tag } = req.params
+    const user_id = req.user._id
     try {
         const dbTag = await Tag.findOne({ title: tag.toLowerCase() })
-        const profile = await Profile.findOne({ user: user_id })
-
-        console.log({ tag, user_id, dbTag, tag_id: dbTag._id, profile})
+        let profile = await Profile.findOne({ user: user_id })
 
         if (!dbTag || !profile) {
             return res.status(400).send('An error occurred while following the tag by the user, check parameters')
         }
 
-        await Profile.findOneAndUpdate(
+        profile = await Profile.findOneAndUpdate(
             { user: user_id },
-            { $push: { tags: dbTag._id } },
+            { $addToSet: { tags: dbTag } },
             { new: true }
         )
+        console.log({profile})
+        res.json(profile)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Server error!')
+    }
+})
 
+// Unfollow tag
+router.post('/unfollow/:tag', isAuth, async (req, res, next) => {
+    const { tag } = req.params
+    const user_id = req.user._id
+    try {
+        const dbTag = await Tag.findOne({ title: tag.toLowerCase() })
+        let profile = await Profile.findOne({ user: user_id })
+
+        if (!dbTag || !profile) {
+            return res.status(400).send('An error occurred while unfollowing the tag by the user, check parameters')
+        }
+
+        profile = await Profile.findOneAndUpdate(
+            { user: user_id },
+            { $pull: { tags: { _id: dbTag } } },
+            { new: true }
+        )
+        console.log({profile})
         res.json(profile)
     } catch (error) {
         console.log(error);
