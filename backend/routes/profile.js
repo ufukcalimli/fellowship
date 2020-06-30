@@ -1,11 +1,12 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator')
 
+const logger = require('../helpers/logger')
+const router = express.Router();
+
 const Profile = require('../models/profile');
 const Language = require('../models/language');
 const Role = require('../models/role')
-
-const router = express.Router();
 
 // Get all profiles
 router.get('/', async (req, res, next) => {
@@ -14,7 +15,7 @@ router.get('/', async (req, res, next) => {
 
         res.json(profiles)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -29,7 +30,7 @@ router.get('/:user_name', async (req, res, next) => {
         
         res.json( profile )
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -85,7 +86,7 @@ router.patch('/:user_name', [
 
         res.json(profile)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }    
 })
@@ -98,7 +99,7 @@ router.delete('/:user_name', async (req, res, next) => {
         
         res.send('Profile removed')
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }  
 })

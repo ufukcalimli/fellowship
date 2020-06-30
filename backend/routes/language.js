@@ -1,9 +1,10 @@
 const express = require('express')
 const { check, validationResult } = require('express-validator')
 
-const Language = require('../models/language')
-
+const logger = require('../helpers/logger')
 const router = express.Router()
+
+const Language = require('../models/language')
 
 // Get languages
 router.get('/', async (req, res, next) => {
@@ -11,7 +12,7 @@ router.get('/', async (req, res, next) => {
         const languages = await Language.find()
         res.json(languages)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -26,7 +27,7 @@ router.get('/:lang', async (req, res, next) => {
         
         res.json(language)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -51,7 +52,7 @@ router.post('/', [
 
         res.json(language)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -72,7 +73,7 @@ router.patch('/:lang', async (req, res, next) => {
 
         await language.save()
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -89,7 +90,7 @@ router.delete('/:lang', async (req, res, next) => {
         
         res.send('Language is deleted')
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })

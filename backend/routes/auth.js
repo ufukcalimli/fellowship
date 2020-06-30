@@ -3,6 +3,7 @@ const { check, validationResult } = require('express-validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+const logger = require('../helpers/logger')
 const router = express.Router()
 
 const User = require('../models/user')
@@ -57,7 +58,7 @@ router.post('/signup', [
             res.json({ token })
         })
     } catch (error) {
-        console.log(error)
+        logger.error(error)
         res.status(500).send('Server error!')
     }
 })

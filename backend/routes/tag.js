@@ -1,6 +1,8 @@
 const express = require('express');
-const router = express.Router();
 const { check, validationResult } = require('express-validator')
+
+const logger = require('../helpers/logger')
+const router = express.Router();
 
 const Tag = require('../models/tag')
 const Profile = require('../models/profile')
@@ -11,7 +13,7 @@ router.get('/', async (req, res, next) => {
         const tags = await Tag.find()
         res.json(tags)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -26,7 +28,7 @@ router.get('/:tag', async (req, res, next) => {
 
         res.json(tag)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -48,7 +50,7 @@ router.get('/:tag/posts', [
         
         res.json(postsByTag)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -74,7 +76,7 @@ router.post('/', [
 
         res.json(tag)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -85,8 +87,6 @@ router.post('/follow/:tag/:user_id', async (req, res, next) => {
     try {
         const dbTag = await Tag.findOne({ title: tag.toLowerCase() })
         const profile = await Profile.findOne({ user: user_id })
-
-        console.log({ tag, user_id, dbTag, tag_id: dbTag._id, profile})
 
         if (!dbTag || !profile) {
             return res.status(400).send('An error occurred while following the tag by the user, check parameters')
@@ -100,7 +100,7 @@ router.post('/follow/:tag/:user_id', async (req, res, next) => {
 
         res.json(profile)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -117,7 +117,7 @@ router.delete('/:tag', async (req, res, next) => {
         
         res.send('Tag is deleted')
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })

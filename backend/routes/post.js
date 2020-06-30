@@ -1,6 +1,8 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator')
+
+const logger = require('../helpers/logger')
 const router = express.Router();
-const { check, validationResult} = require('express-validator')
 
 const Post = require('../models/post')
 const Comment = require('../models/comment')
@@ -14,7 +16,7 @@ router.get('/', async (req, res, next) => {
 
         res.json(posts)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -29,7 +31,7 @@ router.get('/:id', async (req, res, next) => {
         
         res.json(post)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -88,7 +90,7 @@ router.post('/', [
 
         res.json(newPost)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -154,7 +156,7 @@ router.patch('/:id', [
 
         res.json(post)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -180,7 +182,7 @@ router.delete('/:id', async (req, res, next) => {
         
         res.json({ msg: 'Post deleted'})
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })

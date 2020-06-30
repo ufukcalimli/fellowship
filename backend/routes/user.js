@@ -1,6 +1,7 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator')
 
+const logger = require('../helpers/logger')
 const router = express.Router();
 
 const User = require('../models/user')
@@ -15,7 +16,7 @@ router.get('/', async (req, res, next) => {
 
         res.json(users)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -30,7 +31,7 @@ router.get('/:id', async (req, res, next) => {
 
         res.json(user)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -66,7 +67,7 @@ router.patch('/:id', [
 
         res.json(user)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -88,7 +89,7 @@ router.delete('/:id', async (req, res, next) => {
 
         res.json({ msg: 'User deleted'})
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })

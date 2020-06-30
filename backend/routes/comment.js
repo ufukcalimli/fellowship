@@ -1,9 +1,10 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator')
+
+const logger = require('../helpers/logger')
 const router = express.Router();
-const { check, validationResult} = require('express-validator')
 
 const Comment = require('../models/comment')
-const User = require('../models/user')
 const Post = require('../models/post')
 
 // Get comments
@@ -13,7 +14,7 @@ router.get('/', async (req, res, next) => {
         
         res.json(comment)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -28,7 +29,7 @@ router.get('/:id', async (req, res, next) => {
 
         res.json(comment)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -43,7 +44,7 @@ router.get('/profile/:profile_id', async (req, res, next) => {
         
         res.json(commentsByProfileId)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -58,7 +59,7 @@ router.get('/post/:post_id', async (req, res, next) => {
         
         res.json(commentsByPostId)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -89,7 +90,7 @@ router.post('/', [
 
         res.json(comment)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -122,7 +123,7 @@ router.patch('/:id', [
 
         res.json(comment)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -145,7 +146,7 @@ router.delete('/:comment_id', async (req, res, next) => {
         
         res.send('Comment is deleted')
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })

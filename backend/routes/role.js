@@ -1,6 +1,8 @@
 const express = require('express');
-const router = express.Router();
 const { check, validationResult } = require('express-validator')
+
+const logger = require('../helpers/logger')
+const router = express.Router();
 
 const Role = require('../models/role')
 
@@ -11,7 +13,7 @@ router.get('/', async (req, res, next) => {
         
         res.json(roles)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -26,7 +28,7 @@ router.get('/:role', async (req, res, next) => {
 
         res.json(role)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -52,7 +54,7 @@ router.post('/', [
 
         res.json(role)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -69,7 +71,7 @@ router.delete('/:role', async (req, res, next) => {
         
         res.send('Role is deleted')
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
