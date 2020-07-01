@@ -91,6 +91,7 @@ router.post('/', [
         )
 
         await comment.save()
+        logger.info(`Comment [${comment._id}] created at [${req.ip}]`)
 
         res.json(comment)
         logger.http(`Request at [POST:/api/post/]`)
@@ -125,6 +126,7 @@ router.patch('/:id', [
         })
 
         await comment.save()
+        logger.info(`Commment [${comment._id}] updated at [${req.ip}]`)
 
         res.json(comment)
         logger.http(`Request at [PATCH:/api/post/]`)
@@ -150,6 +152,8 @@ router.delete('/:comment_id', async (req, res, next) => {
             await Comment.findOneAndDelete({ _id: comment_id })
         ])
         
+        logger.info(`Comment [${comment._id}] removed at [${req.ip}]`)
+
         res.send('Comment is deleted')
         logger.http(`Request at [DELETE:/api/comment/]`)
     } catch (error) {

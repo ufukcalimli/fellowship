@@ -89,6 +89,7 @@ router.post('/', [
         }
 
         await newPost.save()
+        logger.info(`Post [${newPost._id}] created at [${req.ip}]`)
 
         res.json(newPost)
         logger.http(`Request at [POST:/api/post/]`)
@@ -157,6 +158,8 @@ router.patch('/:id', [
         await profile.save()
         await post.save()
 
+        logger.info(`Post [${post._id}] updated at [${req.ip}]`)
+
         res.json(post)
         logger.http(`Request at [PATCH:/api/post/]`)
     } catch (error) {
@@ -181,6 +184,8 @@ router.delete('/:id', async (req, res, next) => {
             ),
             await Post.findOneAndDelete({ _id: postId })
         ])
+
+        logger.info(`Post [${postId._id}] removed at [${req.ip}]`)
 
         res.json({ msg: 'Post deleted' })
         logger.http(`Request at [DELETE:/api/post/]`)

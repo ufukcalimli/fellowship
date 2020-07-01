@@ -76,6 +76,7 @@ router.post('/', [
         tag = await new Tag({ title })
 
         await tag.save()
+        logger.info(`Tag [${tag._id}] created at [${req.ip}]`)
 
         res.json(tag)
         logger.http(`Request at [POST:/api/tag/]`)
@@ -102,6 +103,8 @@ router.post('/follow/:tag/:user_id', async (req, res, next) => {
             { new: true }
         )
 
+        logger.info(`Tag [${tag._id}] followed by [${profile._id}] at [${req.ip}]`)
+
         res.json(profile)
         logger.http(`Request at [GET:/api/tag/follow/:tag/:user_id] with tag [${tag}] and user id [${user_id}]`)
     } catch (error) {
@@ -119,6 +122,7 @@ router.delete('/:tag', async (req, res, next) => {
         if (!tag) return res.status(400).send('This tag does not exist')
         
         await Tag.findOneAndDelete({ title: tagName })
+        logger.info(`Tag [${tagName}] removed at [${req.ip}]`)
         
         res.send('Tag is deleted')
         logger.http(`Request at [DELETE:/api/tag/]`)

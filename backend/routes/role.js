@@ -53,6 +53,7 @@ router.post('/', [
         role = new Role({ title })
 
         await role.save()
+        logger.info(`Role [${role._id}] created at [${req.ip}]`)
 
         res.json(role)
         logger.http(`Request at [POST:/api/role/] with role [${title}]`)

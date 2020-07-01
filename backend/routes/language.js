@@ -51,6 +51,7 @@ router.post('/', [
         language = await new Language({ title })
 
         await language.save()
+        logger.info(`Language [${language._id}] created at [${req.ip}]`)
 
         res.json(language)
         logger.http(`Request at [POST:/api/language/]`)
@@ -74,6 +75,7 @@ router.patch('/:lang', async (req, res, next) => {
         )
 
         await language.save()
+        logger.info(`Language [${language._id}] updated at [${req.ip}]`)
         
         res.json(language)
         logger.http(`Request at [PATCH:/api/language/] with language [${language.title}]`)
@@ -92,6 +94,7 @@ router.delete('/:lang', async (req, res, next) => {
         if (!language) { return res.status(400).send('Language does not exists') }
         
         await Language.findOneAndDelete({ title: lang })  
+        logger.info(`Language [${language._id}] removed at [${req.ip}]`)
         
         res.send('Language is deleted')
         logger.http(`Request at [DELETE:/api/language/]`)

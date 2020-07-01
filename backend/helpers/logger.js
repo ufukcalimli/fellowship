@@ -1,4 +1,4 @@
-const { createLogger, format, transports } = require('winston')
+const { createLogger, format, transports, config } = require('winston')
 require('winston-daily-rotate-file')
 const fs = require('fs')
 const path = require('path')

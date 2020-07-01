@@ -85,6 +85,7 @@ router.patch('/:user_name', [
         )
 
         await profile.save()
+        logger.info(`Profile [${profile._id}] updated at [${req.ip}]`)
 
         res.json(profile)
         logger.http(`Request at [PATCH:/api/profile/]`)
@@ -101,6 +102,7 @@ router.delete('/:user_name', async (req, res, next) => {
         await Profile.findOneAndRemove({ user_name })
         
         res.send('Profile removed')
+        logger.info(`Profile [${profile._id}] removed at [${req.ip}]`)
         logger.http(`Request at [DELETE:/api/profile/]`)
     } catch (error) {
         logger.error(error);

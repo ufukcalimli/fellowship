@@ -40,6 +40,7 @@ router.post('/signup', [
             user: user._id
         })
         await profile.save()
+        logger.info(`Profile [${profile._id}] created at [${req.ip}]`)
 
         // Password encryption
         const salt = await bcrypt.genSalt(10)
@@ -59,6 +60,7 @@ router.post('/signup', [
         })
 
         logger.http(`User [${user._id}] signed up at [${req.ip}]`)
+        logger.info(`Profile [${profile._id}] created at [${req.ip}]`)
     } catch (error) {
         logger.error(error)
         res.status(500).send('Server error!')
