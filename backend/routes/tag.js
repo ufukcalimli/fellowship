@@ -12,6 +12,7 @@ router.get('/', async (req, res, next) => {
     try {
         const tags = await Tag.find()
         res.json(tags)
+        logger.http(`Request at [GET:/api/tag/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -27,6 +28,7 @@ router.get('/:tag', async (req, res, next) => {
         if(!tag) return res.status(400).send('Tag is not found')
 
         res.json(tag)
+        logger.http(`Request at [GET:/api/tag/:tag] with tag name [${tagName}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -49,6 +51,7 @@ router.get('/:tag/posts', [
         if (!postsByTag) return res.status(400).send('No posts by this tag name')
         
         res.json(postsByTag)
+        logger.http(`Request at [GET:/api/tag/:tag/posts] with tag name [${tagName}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -75,6 +78,7 @@ router.post('/', [
         await tag.save()
 
         res.json(tag)
+        logger.http(`Request at [POST:/api/tag/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -99,6 +103,7 @@ router.post('/follow/:tag/:user_id', async (req, res, next) => {
         )
 
         res.json(profile)
+        logger.http(`Request at [GET:/api/tag/follow/:tag/:user_id] with tag [${tag}] and user id [${user_id}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -116,6 +121,7 @@ router.delete('/:tag', async (req, res, next) => {
         await Tag.findOneAndDelete({ title: tagName })
         
         res.send('Tag is deleted')
+        logger.http(`Request at [DELETE:/api/tag/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')

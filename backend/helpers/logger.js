@@ -25,10 +25,10 @@ module.exports = createLogger({
     ),
     transports: [
         new transports.Console({
-            level: 'info',
+            level: 'silly',
             format: format.combine(
                 format.colorize(),
-                format.printf( info => `${Date.now()} ${info.level}: [${info.label}] ${info.message}`)
+                format.printf(info => `${Date.now()} ${info.level}: [${info.label}] ${info.message}`)
             )
         }),
         dailyRotateFileTransport

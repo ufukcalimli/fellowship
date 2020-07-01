@@ -12,6 +12,7 @@ router.get('/', async (req, res, next) => {
         const roles = await Role.find()
         
         res.json(roles)
+        logger.http(`Request at [GET:/api/role/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -27,6 +28,7 @@ router.get('/:role', async (req, res, next) => {
         if(!role) return res.status(400).send('Role is not found')
 
         res.json(role)
+        logger.http(`Request at [GET:/api/role/:role] with role [${roleName}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -53,6 +55,7 @@ router.post('/', [
         await role.save()
 
         res.json(role)
+        logger.http(`Request at [POST:/api/role/] with role [${title}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -70,6 +73,7 @@ router.delete('/:role', async (req, res, next) => {
         await Role.findOneAndDelete({ title: roleName })
         
         res.send('Role is deleted')
+        logger.http(`Request at [DELETE:/api/role/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')

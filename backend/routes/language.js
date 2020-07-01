@@ -11,6 +11,7 @@ router.get('/', async (req, res, next) => {
     try {
         const languages = await Language.find()
         res.json(languages)
+        logger.http(`Request at [GET:/api/language/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -26,6 +27,7 @@ router.get('/:lang', async (req, res, next) => {
         if (!language) { return res.status(400).send('Language is not found') }
         
         res.json(language)
+        logger.http(`Request at [GET:/api/language/:lang] with language [${lang}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -51,6 +53,7 @@ router.post('/', [
         await language.save()
 
         res.json(language)
+        logger.http(`Request at [POST:/api/language/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -59,7 +62,6 @@ router.post('/', [
 
 // Patch language
 router.patch('/:lang', async (req, res, next) => {
-    const lang = req.params.lang
     const { title } = req.body
     try {
         let language = await Language.findOne({ title: title })
@@ -72,6 +74,9 @@ router.patch('/:lang', async (req, res, next) => {
         )
 
         await language.save()
+        
+        res.json(language)
+        logger.http(`Request at [PATCH:/api/language/] with language [${language.title}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -89,6 +94,7 @@ router.delete('/:lang', async (req, res, next) => {
         await Language.findOneAndDelete({ title: lang })  
         
         res.send('Language is deleted')
+        logger.http(`Request at [DELETE:/api/language/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')

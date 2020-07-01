@@ -14,6 +14,7 @@ router.get('/', async (req, res, next) => {
         const profiles = await Profile.find();
 
         res.json(profiles)
+        logger.http(`Request at [GET:/api/profile/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -28,7 +29,8 @@ router.get('/:user_name', async (req, res, next) => {
         
         if (!profile) { return res.status(400).send('Profile is not found') }
         
-        res.json( profile )
+        res.json(profile)
+        logger.http(`Request at [GET:/api/profile/:user_name] with user name [${userName}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -85,6 +87,7 @@ router.patch('/:user_name', [
         await profile.save()
 
         res.json(profile)
+        logger.http(`Request at [PATCH:/api/profile/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -98,6 +101,7 @@ router.delete('/:user_name', async (req, res, next) => {
         await Profile.findOneAndRemove({ user_name })
         
         res.send('Profile removed')
+        logger.http(`Request at [DELETE:/api/profile/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')

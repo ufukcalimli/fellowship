@@ -57,6 +57,8 @@ router.post('/signup', [
             if (err) throw err;
             res.json({ token })
         })
+
+        logger.http(`User [${user._id}] signed up at [${req.ip}]`)
     } catch (error) {
         logger.error(error)
         res.status(500).send('Server error!')
@@ -96,6 +98,7 @@ router.post('/login', [
             if (err) throw err;
             res.json({ token })
         })   
+        logger.http(`User [${user._id}] logged in at [${req.ip}]`)
     } catch (error) { res.status(500).send('Server error')}    
 })
 

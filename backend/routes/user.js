@@ -15,6 +15,7 @@ router.get('/', async (req, res, next) => {
         const users = await User.find();
 
         res.json(users)
+        logger.http('Request at [GET:/api/user/]')
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -30,6 +31,7 @@ router.get('/:id', async (req, res, next) => {
         if(!user) return res.status(400).json({ msg: 'User is not found'})
 
         res.json(user)
+        logger.http(`Request at [GET:/api/user/:id] with user id [${userId}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -66,6 +68,7 @@ router.patch('/:id', [
         await user.save()
 
         res.json(user)
+        logger.http(`Request at [PATCH:/api/user/:id] with user id [${userId}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -87,7 +90,8 @@ router.delete('/:id', async (req, res, next) => {
             await User.findOneAndDelete({ _id: userId })
         ])
 
-        res.json({ msg: 'User deleted'})
+        res.json({ msg: 'User deleted' })
+        logger.http(`Request at [DELETE:/api/user/:id] with user id [${userId}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')

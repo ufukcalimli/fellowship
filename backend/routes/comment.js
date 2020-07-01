@@ -13,6 +13,7 @@ router.get('/', async (req, res, next) => {
         const comment = await Comment.find()
         
         res.json(comment)
+        logger.http(`Request at [GET:/api/comment/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -28,6 +29,7 @@ router.get('/:id', async (req, res, next) => {
         if(!comment) return res.status(400).send('Comment is not found')
 
         res.json(comment)
+        logger.http(`Request at [GET:/api/comment/:id] with comment id [${commentId}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -43,6 +45,7 @@ router.get('/profile/:profile_id', async (req, res, next) => {
         if (!commentsByProfileId) return res.status(400).send('No comments by this profile')
         
         res.json(commentsByProfileId)
+        logger.http(`Request at [GET:/api/profile/:profile_id] with profile id [${profile_id}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -58,6 +61,7 @@ router.get('/post/:post_id', async (req, res, next) => {
         if (!commentsByPostId) return res.status(400).send('No comments of this post')
         
         res.json(commentsByPostId)
+        logger.http(`Request at [GET:/api/post/:post_id] with post id [${postId}]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -89,6 +93,7 @@ router.post('/', [
         await comment.save()
 
         res.json(comment)
+        logger.http(`Request at [POST:/api/post/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -122,6 +127,7 @@ router.patch('/:id', [
         await comment.save()
 
         res.json(comment)
+        logger.http(`Request at [PATCH:/api/post/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -145,6 +151,7 @@ router.delete('/:comment_id', async (req, res, next) => {
         ])
         
         res.send('Comment is deleted')
+        logger.http(`Request at [DELETE:/api/comment/]`)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
