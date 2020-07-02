@@ -51,7 +51,10 @@ const ProfileSchema = new mongoose.Schema({
                 ref: 'comment'
             }
         }
-    ]
+    ],
+    avatar_path: {
+        type: String
+    }
 });
 
 module.exports = mongoose.model("profile", ProfileSchema);

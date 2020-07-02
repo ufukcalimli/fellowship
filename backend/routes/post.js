@@ -1,11 +1,15 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator')
+const multer = require('multer')
+
 const router = express.Router();
-const { check, validationResult} = require('express-validator')
+const upload = multer({ dest: 'uploads/'})
 
 const Post = require('../models/post')
 const Comment = require('../models/comment')
 const Profile = require('../models/profile')
 const Tag = require('../models/tag')
+
 
 // Get all posts
 router.get('/', async (req, res, next) => {
@@ -38,6 +42,7 @@ const filterTags = (db, reqTags) => { return db.filter(item => reqTags.includes(
 
 // Post post
 router.post('/', [
+    upload.single('postImage'),
     check('title', 'Post title should not be empty')
         .not()
         .isEmpty(),
@@ -64,7 +69,8 @@ router.post('/', [
             content,
             creator: user,
             label,
-            tags: filteredTags
+            tags: filteredTags,
+            post_image_path: req.file.path
         })
 
         // add the post to profile's posts array
@@ -95,6 +101,7 @@ router.post('/', [
 
 // Update post
 router.patch('/:id', [
+    upload.single('postImage'),
     check('title', 'Post title should not be empty')
         .not()
         .isEmpty(),
@@ -128,7 +135,8 @@ router.patch('/:id', [
                     content,
                     tags: filteredTags,
                     user_name,
-                    label
+                    label,
+                    post_image_path: req.file.path
                 }
             },
             { new: true }
