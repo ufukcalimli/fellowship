@@ -1,12 +1,26 @@
 const express = require("express");
-const connectDb = require("./helpers/db");
 const cors = require("cors");
+const passport = require('passport')
+const session = require('express-session')
+
+const connectDb = require("./config/db");
 
 connectDb();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
+app.use(session({
+    saveUninitialized: false,
+    resave:false,
+    secret: 'session_secret', 
+    cookie: { maxAge: 24 * 60 * 60 * 365 * 1000 } // 1 year
+}))
+
+require('./config/passport')
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/api/auth", require("./routes/auth"));
 

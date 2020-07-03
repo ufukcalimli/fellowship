@@ -1,6 +1,8 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator')
 
+const isAuth = require('../config/isAuth')
+
 const Profile = require('../models/profile');
 const Language = require('../models/language');
 const Role = require('../models/role')
@@ -8,7 +10,7 @@ const Role = require('../models/role')
 const router = express.Router();
 
 // Get all profiles
-router.get('/', async (req, res, next) => {
+router.get('/', isAuth, async (req, res, next) => {
     try {
         const profiles = await Profile.find();
 
@@ -20,7 +22,7 @@ router.get('/', async (req, res, next) => {
 })
 
 // Get profile by username
-router.get('/:user_name', async (req, res, next) => {
+router.get('/:user_name', isAuth, async (req, res, next) => {
     const userName = req.params.user_name
     try {
         const profile = await Profile.findOne({ user_name: userName })
@@ -35,7 +37,8 @@ router.get('/:user_name', async (req, res, next) => {
 })
 
 // Patch profile
-router.patch('/:user_name', [
+router.patch('/', [
+    isAuth,
     check('user_name', 'User name should not be empty')
         .not()
         .isEmpty(),
@@ -91,8 +94,8 @@ router.patch('/:user_name', [
 })
 
 // Delete profile
-router.delete('/:user_name', async (req, res, next) => {
-    const user_name = req.params.user_name
+router.delete('/', isAuth, async (req, res, next) => {
+    const user_name = req.body.user_name
     try {
         await Profile.findOneAndRemove({ user_name })
         

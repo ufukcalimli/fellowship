@@ -3,10 +3,12 @@ const { check, validationResult } = require('express-validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-const router = express.Router()
+const passport = require('passport')
 
 const User = require('../models/user')
 const Profile = require('../models/profile')
+
+const router = express.Router()
 
 // Post user
 router.post('/signup', [
@@ -38,19 +40,23 @@ router.post('/signup', [
             user_name,
             user: user._id
         })
-        await profile.save()
-
+        
         // Password encryption
         const salt = await bcrypt.genSalt(10)
         user.password = await bcrypt.hash(password, salt)
-
+        
         await user.save()
+        await profile.save()
 
         const payload = {
             user: {
                 id: user.id
             }
         }
+
+        req.login(user, (err) => {
+            if (err) { return next(err) }
+        })
 
         jwt.sign(payload, process.env.JWTSECRET, { expiresIn: 36000 }, (err, token) => {
             if (err) throw err;
@@ -62,40 +68,49 @@ router.post('/signup', [
     }
 })
 
-router.post('/login', [
-    check('email', 'Please input valid email address')
-        .isEmail()
-        .not()
-        .isEmpty(),
-    check('password', 'Password should contain 6 characters')
-        .isLength({ min: 6 })
-], async (req, res, next) => {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array() }) }
-    
-    const { email, password } = req.body
-    try {
-        let user = await User.findOne({ email })
-        if (!user) { 
-            return res.status(400).json({ errors: [{  msg: 'Invalid credentials!'}] })
-        }
-
-        const isMatch = await bcrypt.compare(password, user.password)
-        if (!isMatch) {
-            return res.status(400).json({ errors: [{  msg: 'Invalid credentials!'}] })
-        }
-            
-        const payload = {
-            user: {
-                id: user.id
+router.post('/login',
+    [
+        check('email', 'Email is required!')
+            .isEmail(),
+        check('password', 'Password should contain 6 characters')
+            .isLength({ min: 6 }),
+        passport.authenticate('local',
+        {
+            successRedirect: '/api/auth/passport/success',
+            failureRedirect: '/login',
+            failureFlash: true
+        })
+    ],
+    async (req, res, next) => {
+        const { email, password } = req.body
+        try {
+            let user = await User.findOne({ email })
+            if (!user) { 
+                return res.status(400).json({ error: 'Invalid credentials!' })
             }
-        }
 
-        jwt.sign(payload, process.env.JWTSECRET, { expiresIn: 36000 }, (err, token) => {
-            if (err) throw err;
-            res.json({ token })
-        })   
-    } catch (error) { res.status(500).send('Server error')}    
+            const isMatch = await bcrypt.compare(password, user.password)
+            if (!isMatch) {
+                return res.status(400).json({ error: 'Invalid credentials!' })
+            }
+                
+            const payload = {
+                user: {
+                    id: user.id
+                }
+            }
+
+            jwt.sign(payload, process.env.JWTSECRET, { expiresIn: 36000 }, (err, token) => {
+                if (err) throw err;
+                res.json({ token })
+            })   
+        } catch (error) { res.status(500).send('Server error')}    
+    }
+)
+
+    
+router.get('/passport/success', (req, res, next) => {
+    res.send(`passport success, user: ${req.user}`)
 })
 
 module.exports = router

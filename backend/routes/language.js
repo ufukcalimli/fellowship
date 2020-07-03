@@ -2,6 +2,7 @@ const express = require('express')
 const { check, validationResult } = require('express-validator')
 
 const Language = require('../models/language')
+const isAuth = require('../config/isAuth')
 
 const router = express.Router()
 
@@ -33,6 +34,7 @@ router.get('/:lang', async (req, res, next) => {
 
 // Post language
 router.post('/', [
+    isAuth,
     check('title', 'Title should not be empty')
         .not()
         .isEmpty()
@@ -57,8 +59,12 @@ router.post('/', [
 })
 
 // Patch language
-router.patch('/:lang', async (req, res, next) => {
-    const lang = req.params.lang
+router.patch('/', [
+        isAuth,
+        check('title', 'Title should not be empty')
+            .not()
+            .isEmpty()
+    ], async (req, res, next) => {
     const { title } = req.body
     try {
         let language = await Language.findOne({ title: title })
@@ -78,14 +84,14 @@ router.patch('/:lang', async (req, res, next) => {
 })
 
 // Delete language
-router.delete('/:lang', async (req, res, next) => {
-    const lang = req.params.lang
+router.delete('/', isAuth, async (req, res, next) => {
+    const title = req.body.title
     try {
-        const language = await Language.findOne({ title: lang })
+        const language = await Language.findOne({ title })
 
         if (!language) { return res.status(400).send('Language does not exists') }
         
-        await Language.findOneAndDelete({ title: lang })  
+        await Language.findOneAndDelete({ title })  
         
         res.send('Language is deleted')
     } catch (error) {
