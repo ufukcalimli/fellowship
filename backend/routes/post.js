@@ -1,7 +1,7 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator')
 
-const logger = require('../helpers/logger')
+const logger = require('../config/logger')
 const router = express.Router();
 
 const isAuth = require('../config/isAuth');

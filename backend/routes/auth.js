@@ -4,13 +4,11 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
 
-const logger = require('../helpers/logger')
+const logger = require('../config/logger')
 const router = express.Router()
 
 const User = require('../models/user')
 const Profile = require('../models/profile')
-
-const router = express.Router()
 
 // Post user
 router.post('/signup', [

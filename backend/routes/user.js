@@ -1,7 +1,7 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator')
 
-const logger = require('../helpers/logger')
+const logger = require('../config/logger')
 const isAuth = require('../config/isAuth');
 
 const router = express.Router();
@@ -10,8 +10,6 @@ const User = require('../models/user')
 const Post = require('../models/post')
 const Comment = require('../models/comment');
 const profile = require('../models/profile');
-
-const router = express.Router();
 
 // Get all users
 router.get('/', isAuth, async (req, res, next) => {

@@ -4,8 +4,7 @@ const passport = require('passport')
 const session = require('express-session')
 
 const connectDb = require("./config/db");
-
-const logger = require('./helpers/logger')
+const logger = require('./config/logger')
 
 connectDb();
 
