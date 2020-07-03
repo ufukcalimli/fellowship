@@ -95,7 +95,7 @@
   }
   .discussions {
     @include gridItem(9, 11, 3, 8);
-    margin: 0px 0 10px 5px;
+    margin: 0px 5px 10px 5px;
     background: rgb(93, 93, 253);
     overflow: auto;
     border-radius: 10px;
@@ -109,6 +109,7 @@
       li {
         margin: 10px 0 10px 0;
         padding: 5px 0 5px 0;
+        border-radius: 4px;
         background: rgba(227, 231, 240, 0.788);
         cursor: pointer;
         &:hover {
@@ -130,7 +131,11 @@
       border-radius: 20px;
 
       h2 {
-        font-size: 2rem;
+        a {
+          font-size: 2rem;
+          color: $dark;
+          cursor: pointer;
+        }
       }
       .posts_comments {
         border: 2px solid black;
@@ -142,6 +147,16 @@
         li {
           margin: 5px;
         }
+      }
+
+      .post_label {
+        background: rgb(160, 159, 159);
+        padding: 2px;
+        border-radius: 10px;
+      }
+
+      .post_date {
+        float: right;
       }
 
       .tags {

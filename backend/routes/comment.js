@@ -2,10 +2,13 @@ const express = require('express');
 const { check, validationResult } = require('express-validator')
 
 const logger = require('../helpers/logger')
+const isAuth = require('../config/isAuth');
+
 const router = express.Router();
 
 const Comment = require('../models/comment')
-const Post = require('../models/post')
+const Post = require('../models/post');
+const Profile = require('../models/profile')
 
 // Get comments
 router.get('/', async (req, res, next) => {
@@ -36,16 +39,17 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
-// Get all comments by profile id
-router.get('/profile/:profile_id', async (req, res, next) => {
-    const profile_id = req.params.profile_id
+// Get all comments by user 
+router.get('/profile', async (req, res, next) => {
+    const user_id = req.user._id
     try {
-        const commentsByProfileId = await Comment.findOne({ profile: profile_id })
+        const profile = await Profile.findOne({ user: user_id }) 
+        const comments = await Comment.find({ profile }).sort({ profile })
         
-        if (!commentsByProfileId) return res.status(400).send('No comments by this profile')
-        
-        res.json(commentsByProfileId)
+        if (!comments) return res.status(400).send('No comments by this profile')
+
         logger.http(`Request at [GET:/api/profile/:profile_id] with profile id [${profile_id}]`)
+        res.json(comments)
     } catch (error) {
         logger.error(error);
         res.status(500).send('Server error!')
@@ -70,18 +74,22 @@ router.get('/post/:post_id', async (req, res, next) => {
 
 // Post comment
 router.post('/', [
+    isAuth,
     check('content', 'Content of comment should not be empty!')
         .not()
         .isEmpty()
 ], async (req, res, next) => {
     const errors = validationResult(req)
-    if(!errors.isEmpty()) { return res.status(400).json({ errors: errors.array()})}    
+    if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array() }) }    
         
-    const { content, user, post } = req.body
-    try {
+    const { content, post } = req.body
+    const user = req.user    
+        try {
+        const profile = await Profile.findOne({ user: user._id }) 
+        
         const comment = await new Comment({
             content,
-            user,
+            profile,
             post
         })
 
@@ -103,6 +111,7 @@ router.post('/', [
 
 // Update comment
 router.patch('/:id', [
+    isAuth,
     check('content', 'Content of comment should not be empty!')
         .not()
         .isEmpty()
@@ -137,7 +146,7 @@ router.patch('/:id', [
 })
 
 // Delete comment
-router.delete('/:comment_id', async (req, res, next) => {
+router.delete('/:comment_id', isAuth, async (req, res, next) => {
     const comment_id = req.params.comment_id
     try {
         const comment = await Comment.findOne({ _id: comment_id })

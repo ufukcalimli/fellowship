@@ -4,10 +4,12 @@ const { check, validationResult } = require('express-validator')
 const logger = require('../helpers/logger')
 const router = express.Router();
 
+const isAuth = require('../config/isAuth');
+
 const Post = require('../models/post')
 const Comment = require('../models/comment')
 const Profile = require('../models/profile')
-const Tag = require('../models/tag')
+const Tag = require('../models/tag');
 
 // Get all posts
 router.get('/', async (req, res, next) => {
@@ -42,6 +44,7 @@ const filterTags = (db, reqTags) => { return db.filter(item => reqTags.includes(
 
 // Post post
 router.post('/', [
+    isAuth,
     check('title', 'Post title should not be empty')
         .not()
         .isEmpty(),
@@ -74,7 +77,7 @@ router.post('/', [
         // add the post to profile's posts array
         await Profile.findOneAndUpdate(
             { user: user },
-            { $push: { posts: newPost } }, // Todo: fix the wrong id issue
+            { $push: { posts: newPost } },
             { new: true }
         )
         
@@ -101,6 +104,7 @@ router.post('/', [
 
 // Update post
 router.patch('/:id', [
+    isAuth,
     check('title', 'Post title should not be empty')
         .not()
         .isEmpty(),
@@ -169,7 +173,7 @@ router.patch('/:id', [
 })
 
 // Delete post
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', isAuth, async (req, res, next) => {
     const postId = req.params.id
     try {
         const post = await Post.findById({ _id: postId })

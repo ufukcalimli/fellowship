@@ -4,7 +4,7 @@ require("dotenv").config();
 const logger = require('./logger')
 
 const connectDb = async () => {
-  try {
+  try { 
     await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useCreateIndex: true,

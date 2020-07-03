@@ -2,12 +2,14 @@ const express = require('express');
 const { check, validationResult } = require('express-validator')
 
 const logger = require('../helpers/logger')
+const isAuth = require('../config/isAuth');
+
 const router = express.Router();
 
-const Role = require('../models/role')
+const Role = require('../models/role');
 
 // Get roles
-router.get('/', async (req, res, next) => {
+router.get('/', isAuth, async (req, res, next) => {
     try {
         const roles = await Role.find()
         
@@ -20,7 +22,7 @@ router.get('/', async (req, res, next) => {
 })
 
 // Get role by name
-router.get('/:role', async (req, res, next) => {
+router.get('/:role', isAuth, async (req, res, next) => {
     const roleName = req.params.role
     try {
         const role = await Role.findOne({ title: roleName })
@@ -37,6 +39,7 @@ router.get('/:role', async (req, res, next) => {
 
 // Post role
 router.post('/', [
+    isAuth,
     check('title', 'Title should not be empty!')
         .not()
         .isEmpty()
@@ -64,7 +67,7 @@ router.post('/', [
 })
 
 // Delete role
-router.delete('/:role', async (req, res, next) => {
+router.delete('/:role', isAuth, async (req, res, next) => {
     const roleName = req.params.role
     try {
         const role = await Role.findOne({ title: roleName })
