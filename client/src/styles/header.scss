@@ -1,5 +1,6 @@
 @import "config";
 @import "variables";
+@import "media";
 
 .header {
   position: relative;
@@ -13,12 +14,12 @@
       padding: 20px;
       z-index: 2;
       color: $dark;
+      font-size: 7rem;
+      color: $dark;
       font-size: 7vw;
     }
     .animated-images {
       position: absolute;
-      height: 250px;
-      width: 50%;
       bottom: 10px;
       right: 10px;
       img {
@@ -62,7 +63,11 @@
 
 .navbar {
   background-color: $orange-dark;
+  position: sticky;
+  top: 0px;
+  background-color: $orange-dark;
   display: flex;
+  justify-content: space-around;
   justify-content: space-between;
   height: 10vh;
   border-radius: 0px 0px 10px 10px;
@@ -103,8 +108,16 @@
       }
       a {
         font-size: 1.2rem;
+        @include tablet() {
+          font-size: 1rem;
+        }
+        @include phone() {
+          font-size: initial;
+          padding: 0px;
+        }
       }
       &:hover {
+        text-shadow: 1px 1px 1px lighten($color: $dark, $amount: 10);
         text-shadow: 1px 1px 1px lighten($color: $dark, $amount: 10);
         transform: translate(0px, -10px);
       }
@@ -117,6 +130,78 @@
   width: 100%;
   top: 0px;
   animation: 1s ease-in-out 0s 1 navbarAnimation;
+  ul {
+    @include tablet() {
+      display: none;
+    }
+    @include phone() {
+      display: none;
+    }
+  }
+  .hamburger_icon {
+    display: none;
+    align-self: center;
+    margin: 10px;
+    div {
+      width: 35px;
+      height: 5px;
+      background-color: black;
+      margin: 6px 0;
+      background: $text-primary;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    @include tablet() {
+      display: block;
+    }
+    @include phone() {
+      display: block;
+    }
+  }
+
+  .hamburger_icon_animation {
+    @include transitionAll();
+    transform: rotate(8turn);
+
+    div {
+      &:first-child {
+        transform: rotate(135deg);
+        position: relative;
+        top: 6px;
+      }
+      &:nth-child(2) {
+        display: none;
+      }
+      &:nth-child(3) {
+        transform: rotate(45deg);
+        position: relative;
+        top: -5px;
+      }
+    }
+  }
+}
+
+.navbar_mobile {
+  ul {
+    display: block;
+    height: 100vh;
+    background: $orange-dark;
+    position: absolute;
+    width: 100%;
+    list-style: none;
+    text-align: center;
+    li {
+      position: relative;
+      animation: rightCome 0.5s linear;
+      @include animationDelay();
+      a {
+        font-size: 2em;
+      }
+    }
+    span {
+      display: none;
+    }
+  }
 }
 
 @keyframes navbarAnimation {
@@ -125,6 +210,18 @@
   }
   100% {
     top: 0px;
+  }
+}
+
+@keyframes rightCome {
+  from {
+    opacity: 0;
+    right: -100px;
+  }
+
+  to {
+    right: 0;
+    opacity: 1;
   }
 }
 

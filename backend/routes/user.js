@@ -1,6 +1,9 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator')
 
+const logger = require('../config/logger')
+const isAuth = require('../config/isAuth');
+
 const router = express.Router();
 
 const User = require('../models/user')
@@ -9,19 +12,20 @@ const Comment = require('../models/comment');
 const profile = require('../models/profile');
 
 // Get all users
-router.get('/', async (req, res, next) => {
+router.get('/', isAuth, async (req, res, next) => {
     try {
         const users = await User.find();
 
         res.json(users)
+        logger.http('Request at [GET:/api/user/]')
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
 
 // Get user by id
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', isAuth, async (req, res, next) => {
     const userId = req.params.id
     try {
         const user = await User.findOne({ _id : userId})
@@ -29,14 +33,16 @@ router.get('/:id', async (req, res, next) => {
         if(!user) return res.status(400).json({ msg: 'User is not found'})
 
         res.json(user)
+        logger.http(`Request at [GET:/api/user/:id] with user id [${userId}]`)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
 
 // Update user
 router.patch('/:id', [
+    isAuth,
     check('name', 'User name is required!')
         .not()
         .isEmpty(),
@@ -63,16 +69,18 @@ router.patch('/:id', [
         )
 
         await user.save()
+        logger.info(`User [${user._id}] updated at [${req.ip}]`)
 
         res.json(user)
+        logger.http(`Request at [PATCH:/api/user/:id] with user id [${userId}]`)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
 
 // Delete user
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', isAuth, async (req, res, next) => {
     const userId = req.params.id
     try {
         const user = await User.findById({ _id: userId})
@@ -86,9 +94,12 @@ router.delete('/:id', async (req, res, next) => {
             await User.findOneAndDelete({ _id: userId })
         ])
 
-        res.json({ msg: 'User deleted'})
+        logger.info(`User [${user._id}] removed at [${req.ip}]`)
+
+        res.json({ msg: 'User deleted' })
+        logger.http(`Request at [DELETE:/api/user/:id] with user id [${userId}]`)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })

@@ -126,15 +126,13 @@ const Home = () => {
               const comm = comments.filter((c) => c.postId === post.userId);
 
               return (
-                <article
-                  className="posts"
-                  key={post.id}
-                  onClick={() => <Link to={`/post/${post.id}`} />}
-                >
-                  <label className="post_label"> Label </label>
+                <article className="posts" key={post.id}>
                   <span className="post_owner">{`Written by ${post.userId}`}</span>{" "}
+                  <label className="post_label"> Label </label>
                   <span className="post_date">Create date</span>
-                  <h2>{post.title}</h2>
+                  <h2>
+                    <Link to={`/post/${post.id}`}>{post.title}</Link>
+                  </h2>
                   <p>{post.body}</p>
                   <section className="posts_commments">
                     <ul>

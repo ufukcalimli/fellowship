@@ -3,11 +3,15 @@ const { check, validationResult } = require('express-validator')
 const multer = require('multer')
 const {multerStorage ,fileFilter, limits} = require('../helpers/multerStorageConfig')
 
+const logger = require('../config/logger')
+const isAuth = require('../config/isAuth')
+
+const router = express.Router();
+
 const Profile = require('../models/profile');
 const Language = require('../models/language');
 const Role = require('../models/role')
 
-const router = express.Router();
 const upload = multer({
     storage: multerStorage,
     fileFilter: fileFilter,
@@ -15,34 +19,37 @@ const upload = multer({
 })
 
 // Get all profiles
-router.get('/', async (req, res, next) => {
+router.get('/', isAuth, async (req, res, next) => {
     try {
         const profiles = await Profile.find();
 
         res.json(profiles)
+        logger.http(`Request at [GET:/api/profile/]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
 
 // Get profile by username
-router.get('/:user_name', async (req, res, next) => {
+router.get('/:user_name', isAuth, async (req, res, next) => {
     const userName = req.params.user_name
     try {
         const profile = await Profile.findOne({ user_name: userName })
         
         if (!profile) { return res.status(400).send('Profile is not found') }
         
-        res.json( profile )
+        res.json(profile)
+        logger.http(`Request at [GET:/api/profile/:user_name] with user name [${userName}]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
 
 // Patch profile
-router.patch('/:user_name', [
+router.patch('/', [
+    isAuth,
     check('user_name', 'User name should not be empty')
         .not()
         .isEmpty(),
@@ -89,23 +96,27 @@ router.patch('/:user_name', [
         )
 
         await profile.save()
+        logger.info(`Profile [${profile._id}] updated at [${req.ip}]`)
 
         res.json(profile)
+        logger.http(`Request at [PATCH:/api/profile/]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }    
 })
 
 // Delete profile
-router.delete('/:user_name', async (req, res, next) => {
-    const user_name = req.params.user_name
+router.delete('/', isAuth, async (req, res, next) => {
+    const user_name = req.body.user_name
     try {
         await Profile.findOneAndRemove({ user_name })
         
         res.send('Profile removed')
+        logger.info(`Profile [${profile._id}] removed at [${req.ip}]`)
+        logger.http(`Request at [DELETE:/api/profile/]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }  
 })
