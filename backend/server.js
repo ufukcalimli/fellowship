@@ -5,6 +5,8 @@ const session = require('express-session')
 
 const connectDb = require("./config/db");
 
+const logger = require('./helpers/logger')
+
 connectDb();
 
 const app = express();
@@ -36,4 +38,4 @@ app.use("/api/language", require("./routes/language"));
 
 const PORT = 5000 || process.env.PORT;
 
-app.listen(PORT, console.log(`Server is running on http://localhost:${PORT}`));
+app.listen(PORT, logger.info(`Server is running on http://localhost:${PORT}`));

@@ -1,8 +1,10 @@
 const express = require('express');
-const router = express.Router();
 const { check, validationResult } = require('express-validator')
 
+const logger = require('../helpers/logger')
 const isAuth = require('../config/isAuth');
+
+const router = express.Router();
 
 const Comment = require('../models/comment')
 const Post = require('../models/post');
@@ -14,8 +16,9 @@ router.get('/', async (req, res, next) => {
         const comment = await Comment.find()
         
         res.json(comment)
+        logger.http(`Request at [GET:/api/comment/]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -29,8 +32,9 @@ router.get('/:id', async (req, res, next) => {
         if(!comment) return res.status(400).send('Comment is not found')
 
         res.json(comment)
+        logger.http(`Request at [GET:/api/comment/:id] with comment id [${commentId}]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -43,10 +47,11 @@ router.get('/profile', async (req, res, next) => {
         const comments = await Comment.find({ profile }).sort({ profile })
         
         if (!comments) return res.status(400).send('No comments by this profile')
-        
+
+        logger.http(`Request at [GET:/api/profile/:profile_id] with profile id [${profile_id}]`)
         res.json(comments)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -60,8 +65,9 @@ router.get('/post/:post_id', async (req, res, next) => {
         if (!commentsByPostId) return res.status(400).send('No comments of this post')
         
         res.json(commentsByPostId)
+        logger.http(`Request at [GET:/api/post/:post_id] with post id [${postId}]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -93,10 +99,12 @@ router.post('/', [
         )
 
         await comment.save()
+        logger.info(`Comment [${comment._id}] created at [${req.ip}]`)
 
         res.json(comment)
+        logger.http(`Request at [POST:/api/post/]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -127,10 +135,12 @@ router.patch('/:id', [
         })
 
         await comment.save()
+        logger.info(`Commment [${comment._id}] updated at [${req.ip}]`)
 
         res.json(comment)
+        logger.http(`Request at [PATCH:/api/post/]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -151,9 +161,12 @@ router.delete('/:comment_id', isAuth, async (req, res, next) => {
             await Comment.findOneAndDelete({ _id: comment_id })
         ])
         
+        logger.info(`Comment [${comment._id}] removed at [${req.ip}]`)
+
         res.send('Comment is deleted')
+        logger.http(`Request at [DELETE:/api/comment/]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })

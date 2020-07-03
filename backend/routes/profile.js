@@ -1,13 +1,14 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator')
 
+const logger = require('../helpers/logger')
 const isAuth = require('../config/isAuth')
+
+const router = express.Router();
 
 const Profile = require('../models/profile');
 const Language = require('../models/language');
 const Role = require('../models/role')
-
-const router = express.Router();
 
 // Get all profiles
 router.get('/', isAuth, async (req, res, next) => {
@@ -15,8 +16,9 @@ router.get('/', isAuth, async (req, res, next) => {
         const profiles = await Profile.find();
 
         res.json(profiles)
+        logger.http(`Request at [GET:/api/profile/]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -29,9 +31,10 @@ router.get('/:user_name', isAuth, async (req, res, next) => {
         
         if (!profile) { return res.status(400).send('Profile is not found') }
         
-        res.json( profile )
+        res.json(profile)
+        logger.http(`Request at [GET:/api/profile/:user_name] with user name [${userName}]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -85,10 +88,12 @@ router.patch('/', [
         )
 
         await profile.save()
+        logger.info(`Profile [${profile._id}] updated at [${req.ip}]`)
 
         res.json(profile)
+        logger.http(`Request at [PATCH:/api/profile/]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }    
 })
@@ -100,8 +105,10 @@ router.delete('/', isAuth, async (req, res, next) => {
         await Profile.findOneAndRemove({ user_name })
         
         res.send('Profile removed')
+        logger.info(`Profile [${profile._id}] removed at [${req.ip}]`)
+        logger.http(`Request at [DELETE:/api/profile/]`)
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }  
 })

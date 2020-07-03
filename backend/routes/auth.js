@@ -2,8 +2,10 @@ const express = require('express')
 const { check, validationResult } = require('express-validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-
 const passport = require('passport')
+
+const logger = require('../helpers/logger')
+const router = express.Router()
 
 const User = require('../models/user')
 const Profile = require('../models/profile')
@@ -40,13 +42,14 @@ router.post('/signup', [
             user_name,
             user: user._id
         })
-        
+        await profile.save()
+        logger.info(`Profile [${profile._id}] created at [${req.ip}]`)
+
         // Password encryption
         const salt = await bcrypt.genSalt(10)
         user.password = await bcrypt.hash(password, salt)
         
         await user.save()
-        await profile.save()
 
         const payload = {
             user: {
@@ -62,8 +65,11 @@ router.post('/signup', [
             if (err) throw err;
             res.json({ token })
         })
+
+        logger.http(`User [${user._id}] signed up at [${req.ip}]`)
+        logger.info(`Profile [${profile._id}] created at [${req.ip}]`)
     } catch (error) {
-        console.log(error)
+        logger.error(error)
         res.status(500).send('Server error!')
     }
 })
@@ -85,7 +91,7 @@ router.post('/login',
         const { email, password } = req.body
         try {
             let user = await User.findOne({ email })
-            if (!user) { 
+            if (!user) {
                 return res.status(400).json({ error: 'Invalid credentials!' })
             }
 
@@ -103,8 +109,9 @@ router.post('/login',
             jwt.sign(payload, process.env.JWTSECRET, { expiresIn: 36000 }, (err, token) => {
                 if (err) throw err;
                 res.json({ token })
-            })   
-        } catch (error) { res.status(500).send('Server error')}    
+            })
+            logger.http(`User [${user._id}] logged in at [${req.ip}]`)
+        } catch (error) { res.status(500).send('Server error') }
     }
 )
 

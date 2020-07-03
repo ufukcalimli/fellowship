@@ -1,6 +1,8 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator')
+
+const logger = require('../helpers/logger')
 const router = express.Router();
-const { check, validationResult} = require('express-validator')
 
 const isAuth = require('../config/isAuth');
 
@@ -15,8 +17,9 @@ router.get('/', async (req, res, next) => {
         const posts = await Post.find().populate(['comment', 'tag'])
 
         res.json(posts)
+        logger.http(`Request at [GET:/api/post/]`)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -30,8 +33,9 @@ router.get('/:id', async (req, res, next) => {
         if(!post) return res.status(400).send('Post not found!')
         
         res.json(post)
+        logger.http(`Request at [GET:/api/post/:id] with post id [${postId}]`)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -88,10 +92,12 @@ router.post('/', [
         }
 
         await newPost.save()
+        logger.info(`Post [${newPost._id}] created at [${req.ip}]`)
 
         res.json(newPost)
+        logger.http(`Request at [POST:/api/post/]`)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -156,9 +162,12 @@ router.patch('/:id', [
         await profile.save()
         await post.save()
 
+        logger.info(`Post [${post._id}] updated at [${req.ip}]`)
+
         res.json(post)
+        logger.http(`Request at [PATCH:/api/post/]`)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -180,11 +189,12 @@ router.delete('/:id', isAuth, async (req, res, next) => {
             await Post.findOneAndDelete({ _id: postId })
         ])
 
-        
-        
-        res.json({ msg: 'Post deleted'})
+        logger.info(`Post [${postId._id}] removed at [${req.ip}]`)
+
+        res.json({ msg: 'Post deleted' })
+        logger.http(`Request at [DELETE:/api/post/]`)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })

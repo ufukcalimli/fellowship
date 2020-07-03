@@ -1,7 +1,10 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator')
 
+const logger = require('../helpers/logger')
 const isAuth = require('../config/isAuth');
+
+const router = express.Router();
 
 const User = require('../models/user')
 const Post = require('../models/post')
@@ -16,8 +19,9 @@ router.get('/', isAuth, async (req, res, next) => {
         const users = await User.find();
 
         res.json(users)
+        logger.http('Request at [GET:/api/user/]')
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -31,8 +35,9 @@ router.get('/:id', isAuth, async (req, res, next) => {
         if(!user) return res.status(400).json({ msg: 'User is not found'})
 
         res.json(user)
+        logger.http(`Request at [GET:/api/user/:id] with user id [${userId}]`)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -66,10 +71,12 @@ router.patch('/:id', [
         )
 
         await user.save()
+        logger.info(`User [${user._id}] updated at [${req.ip}]`)
 
         res.json(user)
+        logger.http(`Request at [PATCH:/api/user/:id] with user id [${userId}]`)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
@@ -89,9 +96,12 @@ router.delete('/:id', isAuth, async (req, res, next) => {
             await User.findOneAndDelete({ _id: userId })
         ])
 
-        res.json({ msg: 'User deleted'})
+        logger.info(`User [${user._id}] removed at [${req.ip}]`)
+
+        res.json({ msg: 'User deleted' })
+        logger.http(`Request at [DELETE:/api/user/:id] with user id [${userId}]`)
     } catch (error) {
-        console.log(error)
+        logger.error(error);
         res.status(500).send('Server error!')
     }
 })
