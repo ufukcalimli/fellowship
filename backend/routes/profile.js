@@ -1,5 +1,7 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator')
+const multer = require('multer')
+const {multerStorage ,fileFilter, limits} = require('../helpers/multerStorageConfig')
 
 const logger = require('../config/logger')
 const isAuth = require('../config/isAuth')
@@ -9,6 +11,12 @@ const router = express.Router();
 const Profile = require('../models/profile');
 const Language = require('../models/language');
 const Role = require('../models/role')
+
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: fileFilter,
+    limits: limits
+})
 
 // Get all profiles
 router.get('/', isAuth, async (req, res, next) => {
@@ -113,5 +121,28 @@ router.delete('/', isAuth, async (req, res, next) => {
     }  
 })
 
+
+router.post('/avatar', upload.single('avatar'), async (req, res, next) => { 
+    // TODO: - check user in the request
+    //       - use logger
+    //       - check if auth user
+    try {
+        const profile = await Profile.findOne({ user: req.user._id })
+        if (!profile){ return res.status(400).send('Profile is not found!')}
+
+        await Profile.findOneAndUpdate(
+            { user: req.user._id },
+            { $set: { avatar_path: req.file.path } },
+            { new: true}
+        )
+
+        res.json(profile)
+
+        res.json({img: req.file})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Server error!')
+    }
+})
 
 module.exports = router;

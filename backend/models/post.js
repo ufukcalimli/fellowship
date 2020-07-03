@@ -25,6 +25,9 @@ const PostSchema = new mongoose.Schema({
         type: Date,
         default: Date.now  
     },
+    post_image_path: {
+        type: String
+    },
     tags: [
         {
             tag: {
