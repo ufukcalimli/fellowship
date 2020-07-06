@@ -53,13 +53,6 @@ router.patch(
 // Delete profile
 router.delete("/", isAuth, deleteProfile);
 
-router.post(
-  "/avatar",
-  upload.single("avatar"),
-  postAvatar
-  // TODO: - check user in the request
-  //       - use logger
-  //       - check if auth user
-);
+router.post("/avatar", [isAuth, upload.single("avatar")], postAvatar);
 
 module.exports = router;

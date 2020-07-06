@@ -48,7 +48,7 @@ module.exports.getByProfile = async (req, res, next) => {
 module.exports.getByPostId = async (req, res, next) => {
   const postId = req.params.post_id;
   try {
-    const commentsByPostId = await Comment.findOne({ post: postId });
+    const commentsByPostId = await Comment.find().sort({ post: postId });
 
     if (!commentsByPostId)
       return res.status(400).send("No comments of this post");

@@ -95,7 +95,7 @@ module.exports.followTag = async (req, res, next) => {
     logger.info(`Tag [${tag._id}] followed by [${profile._id}] at [${req.ip}]`);
     res.json(profile);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send("Server error!");
   }
 };
@@ -120,7 +120,7 @@ module.exports.unfollowTag = async (req, res, next) => {
       { $pull: { tags: { _id: dbTag } } },
       { new: true }
     );
-    console.log({ profile });
+
     res.json(profile);
     logger.http(
       `Request at [GET:/api/tag/follow/:tag/:user_id] with tag [${tag}] and user id [${user_id}]`

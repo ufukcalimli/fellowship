@@ -90,9 +90,6 @@ module.exports.deleteProfile = async (req, res, next) => {
 };
 
 module.exports.postAvatar = async (req, res, next) => {
-  // TODO: - check user in the request
-  //       - use logger
-  //       - check if auth user
   try {
     const profile = await Profile.findOne({ user: req.user._id });
     if (!profile) {
@@ -105,11 +102,10 @@ module.exports.postAvatar = async (req, res, next) => {
       { new: true }
     );
 
-    res.json(profile);
-
-    res.json({ img: req.file });
+    res.json({ img: req.file, profile: profile });
+    logger.info(`Set avatar for [${profile.user_name}]`);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send("Server error!");
   }
 };

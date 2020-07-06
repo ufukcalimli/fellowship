@@ -1,3 +1,8 @@
+// Being used by post and patch
+const filterTags = (db, reqTags) => {
+  return db.filter((item) => reqTags.includes(item.title));
+};
+
 module.exports.getAll = async (req, res, next) => {
   try {
     const posts = await Post.find().populate(["comment", "tag"]);
@@ -28,18 +33,14 @@ module.exports.getById = async (req, res, next) => {
   }
 };
 
-// Being used by post and patch
-const filterTags = (db, reqTags) => {
-  return db.filter((item) => reqTags.includes(item.title));
-};
-
 module.exports.postPost = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { title, content, user, label, tags } = req.body;
+  const user = req.user;
+  const { title, content, label, tags } = req.body;
 
   try {
     const tagsFromDb = await Tag.find();
@@ -48,7 +49,7 @@ module.exports.postPost = async (req, res, next) => {
     const newPost = await new Post({
       title,
       content,
-      creator: user,
+      creator: user._id,
       label,
       tags: filteredTags,
       post_image_path: req.file.path,
@@ -126,6 +127,12 @@ module.exports.patchPost = async (req, res, next) => {
     const profile = await Profile.findOneAndUpdate(
       { user_name },
       { $push: { posts: post._id } }
+    );
+
+    post = await Post.findOneAndUpdate(
+      { _id: postId },
+      { $set: { creator: profile.user_name } },
+      { new: true }
     );
 
     await profile.save();
