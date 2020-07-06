@@ -29,6 +29,6 @@ router.post(
 );
 
 // Delete role
-router.delete("/:role", isAuth, deleteRole);
+router.delete("/", isAuth, deleteRole);
 
 module.exports = router;

@@ -26,7 +26,7 @@ router.get("/:id", isAuth, getById);
 
 // Update user
 router.patch(
-  "/:id",
+  "/",
   [
     isAuth,
     check("name", "User name is required!").not().isEmpty(),
@@ -36,6 +36,6 @@ router.patch(
 );
 
 // Delete user
-router.delete("/:id", isAuth, deleteUser);
+router.delete("/", isAuth, deleteUser);
 
 module.exports = router;

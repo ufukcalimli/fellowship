@@ -46,6 +46,6 @@ router.post("/follow/:tag/", isAuth, followTag);
 router.post("/unfollow/:tag", isAuth, unfollowTag);
 
 // Delete tag
-router.delete("/:tag", isAuth, deleteTag);
+router.delete("/", isAuth, deleteTag);
 
 module.exports = router;

@@ -51,6 +51,6 @@ router.patch(
 );
 
 // Delete post
-router.delete("/:id", isAuth, deletePost);
+router.delete("/", isAuth, deletePost);
 
 module.exports = router;

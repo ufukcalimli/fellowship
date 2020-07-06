@@ -44,7 +44,7 @@ router.post(
 
 // Update comment
 router.patch(
-  "/:id",
+  "/",
   [
     isAuth,
     check("content", "Content of comment should not be empty!").not().isEmpty(),
@@ -53,6 +53,6 @@ router.patch(
 );
 
 // Delete comment
-router.delete("/:comment_id", isAuth, deleteComment);
+router.delete("/", isAuth, deleteComment);
 
 module.exports = router;
