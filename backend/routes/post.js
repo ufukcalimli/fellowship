@@ -1,9 +1,13 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
 const multer = require("multer");
+const {
+  multerStorage,
+  fileFilter,
+  limits,
+} = require("../config/multerStorageConfig");
 
 const router = express.Router();
-const upload = multer({ dest: "uploads/" });
 const logger = require("../config/logger");
 const isAuth = require("../config/isAuth");
 
@@ -11,6 +15,12 @@ const Post = require("../models/post");
 const Comment = require("../models/comment");
 const Profile = require("../models/profile");
 const Tag = require("../models/tag");
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: fileFilter,
+  limits: limits,
+});
 
 const {
   getAll,

@@ -5,7 +5,7 @@ const {
   multerStorage,
   fileFilter,
   limits,
-} = require("../helpers/multerStorageConfig");
+} = require("../config/multerStorageConfig");
 
 const logger = require("../config/logger");
 const isAuth = require("../config/isAuth");
