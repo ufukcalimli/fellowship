@@ -13,7 +13,6 @@ import Logo from "../images/logo1.png";
 import "../styles/header.scss";
 
 const Header = ({ user }) => {
-  let history = useHistory();
   return (
     <header className="header">
       <div className="banner">
@@ -28,9 +27,9 @@ const Header = ({ user }) => {
         </div>
       </div>
       <div className="navbar">
-        <div className="logo" onClick={() => history.push("/home")}>
+        <Link className="logo" to="/home">
           <img src={Logo} alt="site logo" />
-        </div>
+        </Link>
         <ul>
           <li>
             <TiHome size="1.5em" fill="white" />
