@@ -8,6 +8,7 @@ const ProfileSchema = new mongoose.Schema({
     user_name: {
         type: String,
         required: true,
+        unique: true
     },
     first_name: {
         type: String,
@@ -50,7 +51,10 @@ const ProfileSchema = new mongoose.Schema({
                 ref: 'comment'
             }
         }
-    ]
+    ],
+    avatar_path: {
+        type: String
+    }
 });
 
 module.exports = mongoose.model("profile", ProfileSchema);

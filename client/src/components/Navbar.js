@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { BsPen } from "react-icons/bs";
 import { TiHome, TiUser } from "react-icons/ti";
 import { GoPrimitiveDot } from "react-icons/go";
@@ -9,21 +9,35 @@ import Logo from "../images/logo1.png";
 import "../styles/header.scss";
 
 const Navbar = () => {
-  let history = useHistory();
-  function redirect() {
-    return history.push("/");
-  }
+  const [toggleMenu, setToggleMenu] = useState(false);
+  const [queryValue, setQueryValue] = useState("");
+
+  const handleQueryChange = (e) => {
+    console.log(e.target.value);
+    setQueryValue(e.target.value);
+  };
 
   return (
     <React.Fragment>
       {!user && (
-        <nav className="navbar navbar_main">
+        <nav
+          className={
+            toggleMenu
+              ? "navbar navbar_main navbar_mobile"
+              : "navbar navbar_main"
+          }
+        >
           <div>
             <Link to="/">
               <img className="logo" src={Logo} alt="site_logo" />
             </Link>
             <div className="search">
-              <input type="text" />
+              <input
+                type="text"
+                value={queryValue}
+                placeholder="Search..."
+                onChange={(e) => handleQueryChange(e)}
+              />
             </div>
           </div>
           <ul>
@@ -46,15 +60,40 @@ const Navbar = () => {
               <Link to="/login">Log In</Link>
             </li>
           </ul>
+          <i
+            className={
+              toggleMenu
+                ? "hamburger_icon hamburger_icon_animation"
+                : "hamburger_icon"
+            }
+            onClick={() => setToggleMenu(!toggleMenu)}
+          >
+            <div></div>
+            <div></div>
+            <div></div>
+          </i>
         </nav>
       )}
 
       {user && (
-        <nav className="navbar navbar_main">
+        <nav
+          className={
+            toggleMenu
+              ? "navbar navbar_main navbar_mobile"
+              : "navbar navbar_main"
+          }
+        >
           <div>
-            <img className="logo" src={Logo} alt="site_logo"></img>
+            <Link to="/">
+              <img className="logo" src={Logo} alt="site_logo"></img>
+            </Link>
             <div className="search">
-              <input type="text" />
+              <input
+                type="text"
+                value={queryValue}
+                placeholder="Search..."
+                onChange={(e) => handleQueryChange(e)}
+              />
             </div>
           </div>
           <ul>
@@ -86,6 +125,18 @@ const Navbar = () => {
               <Link to="/dashboard">Logout</Link>
             </li>
           </ul>
+          <i
+            className={
+              toggleMenu
+                ? "hamburger_icon hamburger_icon_animation"
+                : "hamburger_icon"
+            }
+            onClick={() => setToggleMenu(!toggleMenu)}
+          >
+            <div></div>
+            <div></div>
+            <div></div>
+          </i>
         </nav>
       )}
     </React.Fragment>

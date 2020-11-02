@@ -1,47 +1,48 @@
-const express = require('express')
-const { check, validationResult } = require('express-validator')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const express = require("express");
+const { check, validationResult } = require("express-validator");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
-const router = express.Router()
+const logger = require("../config/logger");
+const router = express.Router();
 
-const User = require('../models/user')
-const { JsonWebTokenError } = require('jsonwebtoken')
+const { login, signup } = require("../controllers/auth");
 
-// login
-router.post('/login', [
-    check('email', 'Please input email')
-        .not()
-        .isEmpty(),
-    check('password', 'Please should contain 6 characters')
-        .isLength({ min: 6 })
-], async (req, res, next) => {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) { return res.status(400).json({ errors: errors.array() }) }
-    
-    const { email, password } = req.body
-    try {
-        let user = await User.findOne({ email })
-        if (!user) { 
-            return res.status(400).json({ errors: [{  msg: 'Invalid credentials!'}] })
-        }
+const User = require("../models/user");
 
-        const isMatch = await bcrypt.compare(password, user.password)
-        if (!isMatch) {
-            return res.status(400).json({ errors: [{  msg: 'Invalid credentials!'}] })
-        }
-            
-        const payload = {
-            user: {
-                id: user.id
-            }
-        }
+// Post user
+router.post(
+  "/signup",
+  [
+    check("user_name", "User name is required!").not().isEmpty(),
+    check("email", "User email is required!").isEmail(),
+    check(
+      "password",
+      "Password should contain minimum 6 characters!"
+    ).isLength({ min: 6 }),
+  ],
+  signup
+);
 
-        jwt.sign(payload, process.env.JWTSECRET, { expiresIn: 36000 }, (err, token) => {
-            if (err) throw err;
-            res.json({ token })
-        })   
-    } catch (error) { res.status(500).send('Server error')}    
-})
+router.post(
+  "/login",
+  [
+    check("email", "Email is required!").isEmail(),
+    check("password", "Password should contain 6 characters").isLength({
+      min: 6,
+    }),
+    passport.authenticate("local", {
+      successRedirect: "/api/auth/passport/success",
+      failureRedirect: "/login",
+      failureFlash: true,
+    }),
+  ],
+  login
+);
 
-module.exports = router
+router.get("/passport/success", (req, res, next) => {
+  res.send(`passport success, user: ${req.user}`);
+});
+
+module.exports = router;
