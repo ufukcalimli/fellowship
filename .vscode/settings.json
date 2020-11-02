@@ -1,4 +1,5 @@
 {
     "editor.formatOnType": true,
-    "eslint.format.enable": true
+    "eslint.format.enable": true,
+    "liveServer.settings.port": 5501
 }

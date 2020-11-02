@@ -20,6 +20,9 @@
 
     i {
       display: block;
+    }
+
+    a {
       @include transitionAll;
       &:hover {
         color: $orange-dark;

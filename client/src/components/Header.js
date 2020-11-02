@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { GoPrimitiveDot } from "react-icons/go";
 import { TiHome, TiUser } from "react-icons/ti";
 import gutentag from "../images/gutentag.png";
@@ -8,6 +8,7 @@ import ciao from "../images/ciao.png";
 import hello from "../images/hello.png";
 import marhaba from "../images/marhaba.png";
 import salut from "../images/salut.png";
+import Logo from "../images/logo1.png";
 
 import "../styles/header.scss";
 
@@ -26,9 +27,9 @@ const Header = ({ user }) => {
         </div>
       </div>
       <div className="navbar">
-        <div>
-          <i>Logo</i>
-        </div>
+        <Link className="logo" to="/home">
+          <img src={Logo} alt="site logo" />
+        </Link>
         <ul>
           <li>
             <TiHome size="1.5em" fill="white" />

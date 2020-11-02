@@ -1,0 +1,6 @@
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-07-03T11:08:38.545Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-07-03T11:08:38.937Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-07-03T11:25:08.309Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-07-03T11:25:08.753Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-07-03T11:30:24.080Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-07-03T11:30:24.491Z","label":"server.js"}

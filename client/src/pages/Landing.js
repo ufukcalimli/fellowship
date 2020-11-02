@@ -1,10 +1,14 @@
 import React from "react";
 import Header from "../components/Header";
 import "../styles/landing.scss";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
+import LangLearn from "../images/langlearn.png";
+import Community from "../images/community.jpg";
+import CommunicatePic from "../images/communicate.png";
 import { user } from "../mocks";
 
 const Landing = () => {
+  let history = useHistory();
   return (
     <React.Fragment>
       {user && <Redirect to="/home" />}
@@ -22,12 +26,12 @@ const Landing = () => {
             </p>
           </div>
           <div className="intro__image">
-            <img alt="intro_img" />
+            <img src={LangLearn} alt="intro_img" />
           </div>
         </section>
         <section className="landing__site_info">
           <div>
-            <img alt="site_info_ing" />
+            <img src={CommunicatePic} alt="site_info_img" />
           </div>
           <div>
             <h2>What You Can Do Here?</h2>
@@ -45,8 +49,16 @@ const Landing = () => {
               Sounds fun? Then don't waste your time and be a part of the
               community already!
             </p>
+            <button
+              className="btn_signup"
+              onClick={() => history.push("/signup")}
+            >
+              Join The Community!
+            </button>
           </div>
-          <div></div>
+          <div>
+            <img src={Community} alt="comminty-illustration-pic" />
+          </div>
         </section>
       </div>
     </React.Fragment>

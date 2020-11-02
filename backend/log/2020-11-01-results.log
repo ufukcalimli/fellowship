@@ -1,0 +1,40 @@
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:00:27.731Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:00:28.054Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:02:14.419Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:02:14.748Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:02:39.830Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:02:40.103Z","label":"server.js"}
+{"level":"error","timestamp":"2020-11-01T16:02:40.540Z","label":"server.js"}
+{"level":"error","timestamp":"2020-11-01T16:02:52.109Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:04:51.942Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:04:52.237Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:04:55.654Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:04:55.942Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:05:03.169Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:05:03.465Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:06:34.978Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:06:35.302Z","label":"server.js"}
+{"level":"error","timestamp":"2020-11-01T16:06:37.032Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:07:15.129Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:07:15.416Z","label":"server.js"}
+{"level":"error","timestamp":"2020-11-01T16:07:17.338Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:08:11.132Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:08:11.456Z","label":"server.js"}
+{"level":"error","timestamp":"2020-11-01T16:08:13.058Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:08:44.435Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:08:44.714Z","label":"server.js"}
+{"level":"error","timestamp":"2020-11-01T16:08:46.986Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:09:14.385Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:09:14.677Z","label":"server.js"}
+{"level":"error","timestamp":"2020-11-01T16:09:16.701Z","label":"server.js"}
+{"level":"error","timestamp":"2020-11-01T16:09:21.554Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:10:27.790Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:10:28.113Z","label":"server.js"}
+{"level":"error","timestamp":"2020-11-01T16:10:31.643Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:11:07.816Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:11:08.111Z","label":"server.js"}
+{"message":"Profile [5f9eded2de0eb46c9ecc6cbf] created at [::1]","level":"info","timestamp":"2020-11-01T16:14:10.684Z","label":"server.js"}
+{"message":"User [5f9eded2de0eb46c9ecc6cbe] signed up at [::1]","level":"http","timestamp":"2020-11-01T16:14:10.805Z","label":"server.js"}
+{"message":"Profile [5f9eded2de0eb46c9ecc6cbf] created at [::1]","level":"info","timestamp":"2020-11-01T16:14:10.806Z","label":"server.js"}
+{"message":"Server is running on http://localhost:5000","level":"info","timestamp":"2020-11-01T16:19:03.456Z","label":"server.js"}
+{"message":"MongoDB connected.","level":"info","timestamp":"2020-11-01T16:19:03.756Z","label":"server.js"}
